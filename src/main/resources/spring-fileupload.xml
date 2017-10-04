@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean name="simpleFileManager" class="org.roof.fileupload.impl.SimpleFileManager">
+		<property name="fileService" ref="fileService" />
+		<property name="fileInfoService" ref="fileInfoService" />
+	</bean>
+	
+	<bean name="fileService" class="org.roof.fileupload.impl.PathFileService">
+	</bean>
+
+	<bean name="fileInfoService" class="org.roof.fileupload.impl.MybatisFileInfoService">
+		<property name="fileNameGenerator">
+			<bean class="org.roof.fileupload.impl.UuidFileNameGenerator" />
+		</property>
+		<property name="fileTypeGenerator">
+			<bean class="org.roof.fileupload.impl.MappingFileTypeGenerator">
+				<property name="fileTypeMapping">
+					<map>
+						<entry key=".jpg" value="image/jpeg" />
+						<entry key=".png" value="image/png" />
+						<entry key=".gif" value="image/gif" />
+					</map>
+				</property>
+			</bean>
+		</property>
+		<property name="daoSupport" ref="roofDaoSupport" />
+	</bean>
+</beans>

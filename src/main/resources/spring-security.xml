@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd
+                        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+	<!-- 拦截排除列表 -->
+	<!-- <http pattern="/**/*" security="none" /> -->
+	<http pattern="/selin/fileAction/getFile.action*" security="none" />
+	<http pattern="/selin/fileAction/uploadFile.action*" security="none" />
+
+	<http pattern="/selin/user/**" security="none" />
+	<http pattern="/selin/weChatAction/**" security="none" />
+	<http pattern="/mainAction/login.action*" security="none" />
+
+ 	<http pattern="/userAction/goLogin.action*" security="none" />
+ 	<http pattern="/userAction/login.json*" security="none" /> 
+	<http pattern="/tokenAction/accessToken.*" security="none" />
+	<http pattern="/common/js/fort_awesome/font/*" request-matcher="ant" security="none" />
+	<http pattern="/web_common/static/font/*" request-matcher="ant" security="none" />
+	<http pattern="/web_common/bootstrap/fonts/*" request-matcher="ant" security="none" />
+	<http pattern="/**/*.jsp" request-matcher="ant" security="none" />
+	<http pattern="/**/*.css" request-matcher="ant" security="none" />
+	<http pattern="/**/*.js" request-matcher="ant" security="none" />
+	<http pattern=".+[.](ico$|png$|jpg$|gif$|PNG$|JPG$|GIF$|xml$|xls$)" request-matcher="regex" security="none" />
+
+
+
+	<!-- 权限名称必须以 ROLE_ 开头 -->
+	<http auto-config="true" use-expressions="true" pattern="/**"
+		access-denied-page="/web_common/access-denied-page.jsp">
+		<custom-filter ref="filterSecurityInterceptor" before="FILTER_SECURITY_INTERCEPTOR" />
+		<logout logout-success-url="/index.jsp"
+			logout-url="/systemAction/j_spring_security_logout" delete-cookies="JSESSIONID" />
+		<form-login login-page="/userAction/goLogin.action"
+			authentication-failure-handler-ref="authenticationFailureHandler"
+			authentication-success-handler-ref="authenticationSuccessHandler" />
+		<remember-me />
+	</http>
+
+
+	<beans:bean id="authenticationFailureHandler"
+		class="org.roof.web.user.service.api.ChainAuthenticationFailureHandler">
+		<beans:property name="defaultFailureUrl" value="/mainAction/login.action" />
+		<beans:property name="useForward" value="true" />
+		<beans:property name="exceptionMappings">
+			<beans:map>
+				<beans:entry
+					key="org.springframework.security.authentication.BadCredentialsException"
+					value="/error" />
+				<beans:entry
+					key="org.springframework.security.core.userdetails.UsernameNotFoundException"
+					value="/errorcode" />
+			</beans:map>
+		</beans:property>
+		<beans:property name="redirectStrategy">
+			<beans:bean class="org.roof.web.user.service.api.JsonRedirectStrategy" />
+		</beans:property>
+		<beans:property name="authenticationFailureHandlers">
+			<beans:list>
+				<beans:bean
+					class="org.roof.web.user.service.api.SaveLogAuthenticationFailureHandler">
+					<beans:property name="loginLogService" ref="loginLogService" />
+				</beans:bean>
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+
+	<beans:bean id="authenticationSuccessHandler"
+		class="org.roof.web.user.service.api.ChainAuthenticationSuccessHandler">
+		<beans:property name="defaultTargetUrl" value="/mainAction/selin.action" />
+		<beans:property name="redirectStrategy">
+			<beans:bean class="org.roof.web.user.service.api.JsonRedirectStrategy" />
+		</beans:property>
+		<beans:property name="authenticationSuccessHandlers">
+			<beans:list>
+				<beans:bean
+					class="org.roof.web.user.service.api.SaveLogAuthenticationSuccessHandler">
+					<beans:property name="loginLogService" ref="loginLogService" />
+				</beans:bean>
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+
+
+ 	<!-- <beans:bean id="captchaAuthenticaionFilter" class="com.zjhcsoft.filter.UsernamePasswordCaptchaAuthenticationFilter">
+        <beans:property name="authenticationManager" ref="authenticationManager" />
+        <beans:property name="authenticationFailureHandler" ref="authenticationFailureHandler" />
+        <beans:property name="authenticationSuccessHandler" ref="authenticationSuccessHandler" />
+    </beans:bean>
+ -->
+	
+	<beans:bean id="filterSecurityInterceptor"
+		class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<beans:property name="accessDecisionManager" ref="accessDecisionManager" />
+		<beans:property name="securityMetadataSource" ref="securityMetadataSource" />
+	</beans:bean>
+
+	<beans:bean id="accessDecisionManager"
+		class="org.springframework.security.access.vote.AffirmativeBased">
+		<beans:constructor-arg index="0">
+			<util:list>
+				<beans:bean class="org.springframework.security.access.vote.RoleVoter" />
+			</util:list>
+		</beans:constructor-arg>
+	</beans:bean>
+	<authentication-manager alias="authenticationManager"
+		erase-credentials="false">
+		<authentication-provider ref="authenticationProvider"  />
+		
+	</authentication-manager>
+	<beans:bean id="authenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">  
+	    <beans:property name="hideUserNotFoundExceptions" value="false" />  
+	    <beans:property name="userDetailsService" ref="userDetailsService" />
+	</beans:bean>  
+  
+
+	<beans:bean id="securityMetadataSource" scope="singleton"
+		class="org.roof.web.user.service.api.InvocationSecurityMetadataSourceService">
+		<beans:property name="resourceDao" ref="resourceDao" />
+		<beans:property name="cacheManager" ref="cacheManager" />
+		<beans:property name="cachName"
+			value="InvocationSecurityMetadataSourceService#loadResourceDefine" />
+		<beans:property name="roleDao" ref="roleDao" />
+	</beans:bean>
+
+</beans:beans>

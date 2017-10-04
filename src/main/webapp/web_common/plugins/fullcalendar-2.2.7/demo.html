@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+<link href='fullcalendar.css' rel='stylesheet' />
+<link href='fullcalendar.print.css' rel='stylesheet' media='print' />
+<script src='lib/moment.min.js'></script>
+<script src='lib/jquery.min.js'></script>
+<script src='lib/jquery-ui.custom.min.js'></script>
+<script src='fullcalendar.js'></script>
+<script src='lang-all.js'></script>
+<script>
+
+	$(document).ready(function() {
+
+		var currentLangCode = 'zh-cn';
+
+		// build the language selector's options
+		$.each($.fullCalendar.langs, function(langCode) {
+			$('#lang-selector').append(
+				$('<option/>')
+					.attr('value', langCode)
+					.prop('selected', langCode == currentLangCode)
+					.text(langCode)
+			);
+		});
+
+		// rerender the calendar when the selected option changes
+		$('#lang-selector').on('change', function() {
+			if (this.value) {
+				currentLangCode = this.value;
+				$('#calendar').fullCalendar('destroy');
+				renderCalendar();
+			}
+		});
+	function renderCalendar() {
+		$('#calendar').fullCalendar({
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'year,month,agendaWeek,agendaDay'
+			},
+			editable: false,
+			droppable: false, // this allows things to be dropped onto the calendar
+			defaultDate: '2016-02-01',
+			defaultView: 'year',
+			lang:currentLangCode,
+			drop: function() {
+				// is the "remove after drop" checkbox checked?
+				if ($('#drop-remove').is(':checked')) {
+					// if so, remove the element from the "Draggable Events" list
+					$(this).remove();
+				}
+			},
+			events: [
+				{
+					title: 'test',
+					start: '2015-01-11 10:00:00',
+					end: '2015-05-18 21:00:00',
+					endT: '2015-05-18 21:00:00',
+					color: '#0080FF',
+					linkTitle:'2015-01-11 - 2016-05-18 (七天)test'
+				},
+				{
+					title: '足球赛事1',
+					start: '2015-01-11 10:00:00',
+					end: '2016-01-18 21:00:00',
+					endT: '2016-01-18 21:00:00',
+					color: '#0080FF',
+					linkTitle:'2015-01-11 - 2016-01-18 (七天)《足球赛事1》'
+				},
+				{
+					title: '足球赛事2',
+					start: '2016-01-11 10:00:00',
+					end: '2016-01-18 21:00:00',
+					endT: '2016-01-18 21:00:00',
+					color: '#0080FF',
+					linkTitle:'2016-01-11 - 2016-01-18 (七天)《足球赛事2》'
+				},
+				{
+					title: '喜羊羊与灰太狼喜羊羊与灰太狼',
+					id: 'availableForMeeting',
+					start: '2016-01-14 10:00:00',
+					end: '2016-01-22 16:00:00',
+					endT: '2016-01-22 16:00:00',
+					color: '#257e4a',
+					linkTitle:'2016-01-14 - 2016-01-22 (九天)动漫《喜羊羊与灰太狼》'
+				},
+				{
+					title: '花千骨',
+					start: '2016-02-03 13:00:00',
+					end: '2016-02-07 16:00:00',
+					endT: '2016-02-07 16:00:00',
+					color: '#FF5151',
+					linkTitle:'2016-02-03 - 2016-02-07 (五天)电视剧《花千骨》'
+				},
+				{
+					title: '叶问1',
+					start: '2016-02-01 13:00:00',
+					end: '2016-02-20 14:00:00',
+					endT: '2016-02-20 14:00:00',
+					linkTitle:'2016-02-01 - 2016-02-20 (两天)电影《叶问2》'
+				},
+				{
+					title: '快乐大本营',
+					start: '2016-03-25 20:00:00',
+					end: '2016-04-29 16:00:00',
+					endT: '2016-04-29 16:00:00',
+					color: '#8E8E8E',
+					linkTitle:'2016-03-25 - 2016-04-29 (四天)综艺《快乐大本营》'
+				},
+				{
+					title: 'cctv',
+					start: '2016-06-11 10:00:00',
+					end: '2016-07-11 10:00:00',
+					endT: '2016-07-11 10:00:00',
+					color: '#0080FF',
+					linkTitle:'2016-06-11 - 2016-07-11《体育赛事》'
+				},
+				{
+					title: '贝瓦儿歌',
+					start: '2016-04-14 10:00:00',
+					end: '2016-05-22 16:00:00',
+					endT: '2016-05-22 16:00:00',
+					color: '#257e4a',
+					linkTitle:'2016-04-14 - 2016-05-22 (九天)动漫《贝瓦儿歌》'
+				},
+				{
+					title: '复仇者联盟',
+					start: '2016-04-04 10:00:00',
+					end: '2016-08-09 16:00:00',
+					endT: '2016-08-09 16:00:00',
+					color: '#257e4a',
+					linkTitle:'2016-04-04 - 2016-08-09 (六天)动漫《复仇者联盟》'
+				},
+				{
+					title: '体育赛事21212',
+					start: '2016-10-11 10:00:00',
+					end: '2016-12-11 10:00:00',
+					endT: '2016-12-11 10:00:00',
+					color: '#0080FF',
+					linkTitle:'2016-10-11 - 2016-12-11《体育赛事》'
+				},
+				{
+					title: '体育赛事体育赛事5体育赛事5体育赛事5体育赛事55',
+					start: '2016-10-11 10:00:00',
+					end: '2017-12-11 10:00:00',
+					endT: '2017-12-11 10:00:00',
+					color: '#0080FF',
+					linkTitle:'2016-10-11 - 2017-12-11《体育赛事5》'
+				}
+			]
+		});
+	 }
+	 
+	 renderCalendar();
+
+	});
+
+</script>
+<style>
+
+	body {
+		margin: 0;
+		padding: 0;
+		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+		font-size: 14px;
+	}
+		
+	#wrap {
+		padding: 0 10px;
+		width: 1100px;
+		margin: 0 auto;
+	}
+		
+	#external-events {
+		float: left;
+		width: 150px;
+		padding: 0 10px;
+		border: 0px solid;
+		text-align: left;
+	}
+		
+	#external-events h4 {
+		font-size: 16px;
+		margin-top: 0;
+		padding-top: 1em;
+	}
+		
+	#external-events .tv {
+		margin: 10px 0;
+		position: relative;
+		display: block;
+		font-size: .85em;
+		line-height: 1.3;
+		border-radius: 3px;
+		border: 1px solid #FF5151;
+		background-color: #FF5151;
+		font-weight: normal;
+		color:#fff;
+	}
+
+	#external-events .film {
+		margin: 10px 0;
+		position: relative;
+		display: block;
+		font-size: .85em;
+		line-height: 1.3;
+		border-radius: 3px;
+		border: 1px solid #3a87ad;
+		background-color: #3a87ad;
+		font-weight: normal;
+		color:#fff;
+	}
+	
+	#external-events .sport {
+		margin: 10px 0;
+		position: relative;
+		display: block;
+		font-size: .85em;
+		line-height: 1.3;
+		border-radius: 3px;
+		border: 1px solid #0080FF;
+		background-color: #0080FF;
+		font-weight: normal;
+		color:#fff;
+	}
+
+	#external-events .show {
+		margin: 10px 0;
+		position: relative;
+		display: block;
+		font-size: .85em;
+		line-height: 1.3;
+		border-radius: 3px;
+		border: 1px solid #8E8E8E;
+		background-color: #8E8E8E;
+		font-weight: normal;
+		color:#fff;
+	}
+
+	#external-events .comic {
+		margin: 10px 0;
+		position: relative;
+		display: block;
+		font-size: .85em;
+		line-height: 1.3;
+		border-radius: 3px;
+		border: 1px solid #257e4a;
+		background-color: #257e4a;
+		font-weight: normal;
+		color:#fff;
+	}
+	
+	#external-events p {
+		margin: 1.5em 0;
+		font-size: 11px;
+		color: #666;
+	}
+		
+	#external-events p input {
+		margin: 0;
+		vertical-align: middle;
+	}
+
+	#calendar {
+		float: right;
+		max-width: 900px;
+		margin: 40px auto;
+		padding: 0 10px;
+	}
+	#top {
+		background: #eee;
+		border-bottom: 1px solid #ddd;
+		padding: 0 10px;
+		line-height: 40px;
+		font-size: 12px;
+	}
+</style>
+</head>
+<body>
+	<div id='top'>
+		Language:
+		<select id='lang-selector'></select>
+	</div>
+	<div id='wrap'>
+		<div id='external-events'>
+			<h4>业务线：</h4>
+			<div class='tv' >电视剧</div>
+			<div class='film'>电影</div>
+			<div class='sport'>体育</div>
+			<div class='show'>综艺</div>
+			<div class='comic'>动漫</div>
+		</div>
+
+		<div id='calendar'></div>
+
+		<div style='clear:both'></div>
+
+	</div>
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+<link href='fullcalendar.css' rel='stylesheet' />
+<link href='fullcalendar.print.css' rel='stylesheet' media='print' />
+<script src='lib/moment.min.js'></script>
+<script src='lib/jquery.min.js'></script>
+<script src='lib/jquery-ui.custom.min.js'></script>
+<script src='fullcalendar.js'></script>
+<script src='lang-all.js'></script>
+<script>
+    function showDetail(obj, e){  
+        var eInfo = '<div id="tip"><ul>';
+        eInfo += '<li>' + '上线时间：'+moment(obj.start).format("YYYY-MM-DD h:mm:ss")  +'</br>完结时间：'+moment(obj.end).format("YYYY-MM-DD h:mm:ss")+ '</li>';  
+        eInfo += '<li>' +'集数：'+ obj.episodes + '<br/> </li>';  
+        //eInfo += '<li>分类：' + obj.title + '</li>';  
+        eInfo += '<li>' +'跟播规则：'+ obj.play_plan + '<br/> </li>';  
+        eInfo += '</ul></div>';  
+        $(eInfo).appendTo($('body'));  
+        $('#tip').css({"opacity":"0.4", "display":"none", "left":(e.pageX + 20) + "px", "top":(e.pageY + 10) + "px"}).fadeTo(600, 0.9);  
+        //鼠标移动效果  
+        $('.fc-event-inner').mousemove(function(e){  
+            $('#tip').css({'top': (e.pageY + 10), 'left': (e.pageX + 20)});  
+        });  
+    } 
+	
+	$(document).ready(function() {
+
+		var currentLangCode = 'en';
+
+		// build the language selector's options
+		$.each($.fullCalendar.langs, function(langCode) {
+			$('#lang-selector').append(
+				$('<option/>')
+					.attr('value', langCode)
+					.prop('selected', langCode == currentLangCode)
+					.text(langCode)
+			);
+		});
+
+		// rerender the calendar when the selected option changes
+		$('#lang-selector').on('change', function() {
+			if (this.value) {
+				currentLangCode = this.value;
+				$('#calendar').fullCalendar('destroy');
+				renderCalendar();
+			}
+		});
+	function renderCalendar() {
+		$('#calendar').fullCalendar({
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'year,month,agendaWeek,agendaDay'
+			},
+			editable: false,
+			droppable: false, // this allows things to be dropped onto the calendar
+			defaultDate: '2016-02-12',
+			defaultView: 'year',
+			lang:currentLangCode,
+			drop: function() {
+				// is the "remove after drop" checkbox checked?
+				if ($('#drop-remove').is(':checked')) {
+					// if so, remove the element from the "Draggable Events" list
+					$(this).remove();
+				}
+			},
+			 eventMouseover: function(calEvent, jsEvent, view){                
+                showDetail(calEvent, jsEvent);                   
+           },  
+            eventMouseout: function(calEvent, jsEvent, view){  
+                $('#tip').remove();  
+            }, 
+			events: [
+				{
+					id: '1-sport',
+					title: '1.11-1.18(七天)《足球赛事》',
+					start: '2016-01-11T10:00:00',
+					end: '2016-01-18T16:00:00',
+					color: '#0080FF',
+					description:'ssssssssss',
+					episodes:'3',
+					play_plan:'轮播'
+				},
+				{
+					title: '1.14-1.22(九天)动漫《喜羊羊与灰太狼》',
+					id: 'availableForMeeting',
+					start: '2016-01-14T10:00:00',
+					end: '2016-01-22T16:00:00',
+					color: '#257e4a',
+					description:'ssssssssss',
+					episodes:'3',
+					play_plan:'轮播'
+				},
+				{
+					title: '2.03-2.07(五天)电视剧《花千骨》',
+					start: '2016-02-03T13:00:00',
+					end: '2016-02-07T16:00:00',
+					color: '#FF5151',
+					description:'ssssssssss',
+					episodes:'3',
+					play_plan:'轮播'
+				},
+				{
+					title: '2.18-2.20(两天)电影《叶问2》',
+					start: '2016-02-18',
+					end: '2016-02-20',
+					description:'ssssssssss',
+					episodes:'3',
+					play_plan:'轮播'
+				},
+				{
+					title: '2.25-2.29(四天)综艺《快乐大本营》',
+					start: '2016-02-25T20:00:00',
+					end: '2016-02-29T16:00:00',
+					color: '#8E8E8E',
+					description:'ssssssssss',
+					episodes:'3',
+					play_plan:'轮播'
+				},
+				{
+					id: '1-sport',
+					title: '2.11《体育赛事》',
+					start: '2016-02-11T10:00:00',
+					color: '#0080FF',
+					description:'ssssssssss',
+					episodes:'3',
+					play_plan:'轮播'
+				},
+				{
+					title: '2.14-2.22(九天)动漫《贝瓦儿歌》',
+					id: 'availableForMeeting',
+					start: '2016-02-14T10:00:00',
+					end: '2016-02-22T16:00:00',
+					color: '#257e4a',
+					description:'ssssssssss',
+					episodes:'3',
+					play_plan:'轮播'
+				},
+				{
+					title: '3.4-3.9(六天)动漫《复仇者联盟》',
+					id: 'availableForMeeting',
+					start: '2016-03-4T10:00:00',
+					end: '2016-03-9T16:00:00',
+					color: '#257e4a',
+					description:'ssssssssss',
+					episodes:'3',
+					play_plan:'轮播'
+				},
+				{
+					title: '4.11《体育赛事》',
+					start: '2016-04-11T10:00:00',
+					color: '#0080FF',
+					description:'ssssssssss',
+					episodes:'3',
+					play_plan:'轮播'
+				}
+			]
+		});
+	 }
+	 
+	 renderCalendar();
+
+	});
+
+</script>
+<style>
+
+	body {
+		margin: 0;
+		padding: 0;
+		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+		font-size: 14px;
+	}
+		
+	#wrap {
+		padding: 0 10px;
+		width: 1100px;
+		margin: 0 auto;
+	}
+		
+	#external-events {
+		float: left;
+		width: 150px;
+		padding: 0 10px;
+		border: 0px solid;
+		text-align: left;
+	}
+		
+	#external-events h4 {
+		font-size: 16px;
+		margin-top: 0;
+		padding-top: 1em;
+	}
+		
+	#external-events .tv {
+		margin: 10px 0;
+		position: relative;
+		display: block;
+		font-size: .85em;
+		line-height: 1.3;
+		border-radius: 3px;
+		border: 1px solid #FF5151;
+		background-color: #FF5151;
+		font-weight: normal;
+		color:#fff;
+	}
+
+	#external-events .film {
+		margin: 10px 0;
+		position: relative;
+		display: block;
+		font-size: .85em;
+		line-height: 1.3;
+		border-radius: 3px;
+		border: 1px solid #3a87ad;
+		background-color: #3a87ad;
+		font-weight: normal;
+		color:#fff;
+	}
+	
+	#external-events .sport {
+		margin: 10px 0;
+		position: relative;
+		display: block;
+		font-size: .85em;
+		line-height: 1.3;
+		border-radius: 3px;
+		border: 1px solid #0080FF;
+		background-color: #0080FF;
+		font-weight: normal;
+		color:#fff;
+	}
+
+	#external-events .show {
+		margin: 10px 0;
+		position: relative;
+		display: block;
+		font-size: .85em;
+		line-height: 1.3;
+		border-radius: 3px;
+		border: 1px solid #8E8E8E;
+		background-color: #8E8E8E;
+		font-weight: normal;
+		color:#fff;
+	}
+
+	#external-events .comic {
+		margin: 10px 0;
+		position: relative;
+		display: block;
+		font-size: .85em;
+		line-height: 1.3;
+		border-radius: 3px;
+		border: 1px solid #257e4a;
+		background-color: #257e4a;
+		font-weight: normal;
+		color:#fff;
+	}
+	
+	#external-events p {
+		margin: 1.5em 0;
+		font-size: 11px;
+		color: #666;
+	}
+		
+	#external-events p input {
+		margin: 0;
+		vertical-align: middle;
+	}
+
+	#calendar {
+		float: right;
+		max-width: 900px;
+		margin: 40px auto;
+		padding: 0 10px;
+	}
+	#top {
+		background: #eee;
+		border-bottom: 1px solid #ddd;
+		padding: 0 10px;
+		line-height: 40px;
+		font-size: 12px;
+	}
+	/********************************************** 鼠标悬停tip提示  ************************************************/  
+    #tip{  
+        position: absolute;  
+        width: 300px;  
+        max-width: 400px;  
+        text-align: left;  
+        padding: 4px;  
+        border: #F5F5F5 solid 1px;  
+        border-radius: 5px;  
+        background: #F5F5F5;  
+        z-index: 1000;  
+        behavior: url('/css/css3/pie.htc');  
+    }  
+    #tip ul{  
+        margin: 0;  
+        padding: 0;  
+    }  
+    #tip ul li{  
+        font-family:'Microsoft YaHei', 微软雅黑, 'Microsoft JhengHei', 宋体;  
+        font-size:15px;  
+        list-style: none;  
+        padding-left: 1px;  
+    }  
+    .clock{  
+        /*line-height: 60px;*/  
+        background: url('./fullcalendar/images/clock.png') no-repeat;  
+        background-size:40px 40px;  
+    }  
+    .postmessage{  
+        /*line-height: 60px; 
+        font-size: 12px;*/  
+        background: url('./fullcalendar/images/message.png') no-repeat;  
+        background-size:40px 40px;  
+    }  
+    .message{  
+        /*margin-top: 5px;*/  
+        /*line-height: 60px;*/  
+        background: url('./fullcalendar/images/text.png') no-repeat;  
+        background-size:40px 40px;  
+    }  
+</style>
+</head>
+<body>
+	<div id='top'>
+		Language:
+		<select id='lang-selector'></select>
+	</div>
+	<div id='wrap'>
+		<div id='external-events'>
+			<h4>业务线：</h4>
+			<div class='tv' >电视剧</div>
+			<div class='film'>电影</div>
+			<div class='sport'>体育</div>
+			<div class='show'>综艺</div>
+			<div class='comic'>动漫</div>
+		</div>
+
+		<div id='calendar'></div>
+
+		<div style='clear:both'></div>
+
+	</div>
+</body>
+</html>
