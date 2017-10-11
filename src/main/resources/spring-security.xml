@@ -13,6 +13,7 @@
 	
 	<http pattern="/vote/wechat/voteWechatAction/**" security="none" />
 	<http pattern="/vote/wechat/applyWechatAction/**" security="none" />
+	<http pattern="/vote/wechat/fileAction/**" security="none" />
 	
 	<http pattern="/selin/user/**" security="none" />
 	<http pattern="/selin/weChatAction/**" security="none" />
