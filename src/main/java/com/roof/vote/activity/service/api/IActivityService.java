@@ -1,6 +1,7 @@
 package com.roof.vote.activity.service.api;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -14,11 +15,12 @@ import com.roof.vote.production.entity.Production;
 import com.roof.vote.production.entity.ProductionVo;
 
 public interface IActivityService {
+	public ActivityVo selelctActivityByCode(String code);
 
 	public String createCode(Date date);
 
 	/** 是否可以报名 */
-	public Boolean canApply(String code) throws VoteException;
+	public Boolean canApply(String code) throws VoteException, ParseException;
 
 	/** 报名 */
 	public Production apply(ProductionVo pvo) throws VoteException;

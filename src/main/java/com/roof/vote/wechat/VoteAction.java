@@ -24,9 +24,9 @@ public class VoteAction {
 	private IVoteService voteService;
 
 	@RequestMapping("/canVote")
-	public @ResponseBody Result canVote(String openid, HttpServletRequest request, Model model) {
+	public @ResponseBody Result canVote(String openid, String acode, HttpServletRequest request, Model model) {
 		try {
-			String s = voteService.canVote(openid);
+			String s = voteService.canVote(openid, acode);
 			return new Result(Result.SUCCESS, s);
 		} catch (Exception e) {
 			return new Result(Result.FAIL, e.getMessage());

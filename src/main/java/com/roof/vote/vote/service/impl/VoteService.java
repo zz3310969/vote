@@ -1,29 +1,51 @@
 package com.roof.vote.vote.service.impl;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
-import org.roof.roof.dataaccess.api.Page;
+import java.util.Map;
 
+import org.roof.roof.dataaccess.api.Page;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import com.roof.vote.activity.entity.ActivityVo;
+import com.roof.vote.activity.service.api.IActivityService;
+import com.roof.vote.common.ActivityStatusEnum;
 import com.roof.vote.exception.VoteException;
 import com.roof.vote.vote.dao.api.IVoteDao;
 import com.roof.vote.vote.entity.Vote;
 import com.roof.vote.vote.entity.VoteVo;
 import com.roof.vote.vote.service.api.IVoteService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
 @Service
 public class VoteService implements IVoteService {
 	private IVoteDao voteDao;
 
+	@Autowired
+	private IActivityService activityService;
+
 	/** 是否可以投票 */
-	public String canVote(String openid) throws VoteException {
+	public String canVote(String openid, String acode) throws VoteException {
+		ActivityVo avo = activityService.selelctActivityByCode(acode);
+		if (!avo.getStatus().equals(ActivityStatusEnum.inProgress.getCode())) {
+			throw new VoteException("活动不能投票");
+		}
+//		Long 
+		
 		return null;
 	}
 
 	/** 可投票数 */
 	public Long voteNum(String openid, String acode) throws VoteException {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("openid", openid);
+		map.put("acode", acode);
+		
+		voteDao.selectForObject("",map);
+		
+		
 		return null;
 	}
 

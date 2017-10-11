@@ -72,21 +72,21 @@ public class ActivityService implements IActivityService {
 		return str;
 	}
 
-	/** 是否可以报名 */
-	public Boolean canApply(String code) throws VoteException {
-		try {
-			ActivityVo av = this.selelctActivityByCode(code);
-			Date d = RoofDateUtils.getNowDate();
-			if (!av.getStatus().equals(ActivityStatusEnum.inProgress.getCode())) {
-				return false;
-			}
-			if (d.getTime() <= av.getApply_end_time().getTime() && d.getTime() >= av.getApply_start_time().getTime()) {
-				return true;
-			}
+	/**
+	 * 是否可以报名
+	 * 
+	 * @throws ParseException
+	 */
+	public Boolean canApply(String code) throws VoteException, ParseException {
+		ActivityVo av = this.selelctActivityByCode(code);
+		Date d = RoofDateUtils.getNowDate();
+		if (!av.getStatus().equals(ActivityStatusEnum.inProgress.getCode())) {
 			return false;
-		} catch (ParseException e) {
-			throw new VoteException("时间转换异常");
 		}
+		if (d.getTime() <= av.getApply_end_time().getTime() && d.getTime() >= av.getApply_start_time().getTime()) {
+			return true;
+		}
+		return false;
 
 	}
 

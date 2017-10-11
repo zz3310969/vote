@@ -3,12 +3,21 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.roof.vote.vote.dao">
 	<sql id="columnsAs">
-		t1.id, t1.activity_code, t1.vote_user_openid, t1.vote_num, t1.vote_date, t1.vote_code
+		t1.id, t1.activity_code, t1.vote_user_openid, t1.vote_num,
+		t1.vote_date, t1.vote_code
 	</sql>
-	
+
+	<select id="selectVote" resultType="com.roof.vote.vote.entity.VoteVo">
+		select
+		<include refid="columns" />
+		from v_vote
+		where 1=1
+		<include refid="conds" />
+	</select>
+
 	<select id="selectVotePage" resultType="com.roof.vote.vote.entity.VoteVo">
 		select
-		<include refid="columnsAs"/>
+		<include refid="columnsAs" />
 		from
 		v_vote t1
 		join
@@ -22,7 +31,7 @@
 		limit #{firstrownum}, #{limit}) t2
 		where t1.id = t2.id
 	</select>
-	
+
 	<select id="selectVoteCount" resultType="java.lang.Long">
 		select
 		count(id)

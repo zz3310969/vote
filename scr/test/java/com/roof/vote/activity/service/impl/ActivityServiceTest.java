@@ -2,6 +2,7 @@ package com.roof.vote.activity.service.impl;
 
 import static org.junit.Assert.fail;
 
+import java.text.ParseException;
 import java.util.Date;
 
 import org.junit.Test;
@@ -13,6 +14,7 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import com.roof.vote.activity.entity.Activity;
 import com.roof.vote.activity.service.api.IActivityService;
 import com.roof.vote.common.ActivityStatusEnum;
+import com.roof.vote.exception.VoteException;
 
 @ContextConfiguration(locations = { "classpath:spring.xml" })
 public class ActivityServiceTest extends AbstractJUnit4SpringContextTests {
@@ -21,7 +23,7 @@ public class ActivityServiceTest extends AbstractJUnit4SpringContextTests {
 	private IActivityService activityService;
 
 	@Test
-	public void testCanApply() {
+	public void testCanApply() throws VoteException, ParseException {
 		Boolean b = activityService.canApply("A-20171011-000002");
 		System.out.println(b);
 	}
@@ -29,7 +31,7 @@ public class ActivityServiceTest extends AbstractJUnit4SpringContextTests {
 	@Test
 	public void testApply() {
 
-//		activityService.apply(pvo);
+		// activityService.apply(pvo);
 	}
 
 	@Test
