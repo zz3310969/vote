@@ -1,7 +1,11 @@
 package com.roof.vote.production.service.impl;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.roof.roof.dataaccess.api.Page;
 
 import com.roof.vote.activity.service.impl.ActivityService;
@@ -18,6 +22,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.BoundZSetOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,8 +35,23 @@ public class ProductionService implements IProductionService {
 
 	public ProductionVo getPro(Long id) {
 		ProductionVo pvo = this.load(new Production(id));
-
-		return null;
+		String key = Vote.createVoteZsetKey(pvo.getActivity_code());
+		BoundZSetOperations operations = redisTemplate.boundZSetOps(key);
+		Long index = operations.rank(Vote.createVoteZsetValueKey(pvo.getVote_code()));
+		pvo.setIndex(index + 1);
+		Set<TypedTuple<String>> zset = operations.reverseRangeByScoreWithScores(index - 1, index);
+		for (TypedTuple<String> typedTuple : zset) {
+			if (!typedTuple.getValue().equals(Vote.createVoteZsetValueKey(pvo.getVote_code()))) {
+				pvo.setPerNum(typedTuple.getScore());
+			}
+		}
+		// 票差额
+		if (pvo.getPerNum() != null) {
+			pvo.setMarginNum(0D);
+		} else {
+			pvo.setMarginNum(new BigDecimal(pvo.getPerNum()).subtract(new BigDecimal(pvo.getNum())).doubleValue());
+		}
+		return pvo;
 
 	}
 

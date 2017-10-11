@@ -31,7 +31,11 @@ public class ProductionVo extends Production {
 
 	private Double num;// 当前票数
 
-	// private
+	private Long index;// 当前排名
+
+	private Double perNum;// 上一个票数
+
+	private Double marginNum;// 票差
 
 	public ProductionVo() {
 		super();
@@ -120,6 +124,30 @@ public class ProductionVo extends Production {
 
 	public void setNum(Double num) {
 		this.num = num;
+	}
+
+	public Long getIndex() {
+		return index;
+	}
+
+	public void setIndex(Long index) {
+		this.index = index;
+	}
+
+	public Double getPerNum() {
+		return perNum;
+	}
+
+	public void setPerNum(Double perNum) {
+		this.perNum = perNum;
+	}
+
+	public Double getMarginNum() {
+		return marginNum;
+	}
+
+	public void setMarginNum(Double marginNum) {
+		this.marginNum = marginNum;
 	}
 
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.roof.vote.common.ProductionStatusEnum;
 import com.roof.vote.production.entity.Production;
+import com.roof.vote.production.entity.ProductionVo;
 import com.roof.vote.production.service.api.IProductionService;
 import com.roof.vote.vote.entity.VoteVo;
 import com.roof.vote.vote.service.api.IVoteService;
@@ -27,11 +28,10 @@ public class VoteWechatAction {
 	private IProductionService productionService;
 
 	@RequestMapping("/getPro")
-	public @ResponseBody Result getPro(Production product, HttpServletRequest request, Model model) {
+	public @ResponseBody Result getPro(Long id, HttpServletRequest request, Model model) {
 		try {
-			Page page = PageUtils.createPage(request);
-			page = productionService.page(page, product);
-			return new Result(Result.SUCCESS, page);
+			ProductionVo vo = productionService.getPro(id);
+			return new Result(Result.SUCCESS, vo);
 		} catch (Exception e) {
 			return new Result(Result.FAIL, e.getMessage());
 		}

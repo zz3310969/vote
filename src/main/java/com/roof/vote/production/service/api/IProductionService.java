@@ -8,6 +8,8 @@ import com.roof.vote.production.entity.Production;
 import com.roof.vote.production.entity.ProductionVo;
 
 public interface IProductionService {
+	public ProductionVo getPro(Long id);
+
 	public List<ProductionVo> selectProductByuserid(Long user_id);
 
 	/**
