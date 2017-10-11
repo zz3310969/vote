@@ -42,9 +42,9 @@ public class VoteWechatAction {
 	}
 
 	@RequestMapping("/vote")
-	public @ResponseBody Result vote(List<VoteVo> votes, HttpServletRequest request, Model model) {
+	public @ResponseBody Result vote(VoteVo vote, HttpServletRequest request, Model model) {
 		try {
-			voteService.vote(votes);
+			voteService.vote(vote);
 			return new Result(Result.SUCCESS);
 		} catch (Exception e) {
 			return new Result(Result.FAIL, e.getMessage());

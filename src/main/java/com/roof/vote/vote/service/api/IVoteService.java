@@ -18,7 +18,7 @@ public interface IVoteService {
 	public Long voteNum(String openid, String acode) throws VoteException;
 
 	/** 投票 */
-	public void vote(List<VoteVo> votes) throws VoteException;
+	public void vote(VoteVo vote) throws VoteException;
 
 	/** 投票统计 */
 	public void voteReport(String acode) throws VoteException;

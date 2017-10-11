@@ -1,14 +1,18 @@
 package com.roof.vote.vote.service.impl;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.roof.roof.dataaccess.api.Page;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.roof.vote.activity.entity.ActivityVo;
 import com.roof.vote.activity.service.api.IActivityService;
@@ -26,7 +30,7 @@ public class VoteService implements IVoteService {
 	@Autowired
 	private IActivityService activityService;
 
-	/** 是否可以投票 */
+	/** 今天是否可以投票 */
 	public Boolean canVote(String openid, String acode) throws VoteException {
 		Long l = this.voteNum(openid, acode);
 		if (l > 0) {
@@ -35,7 +39,7 @@ public class VoteService implements IVoteService {
 		return false;
 	}
 
-	/** 可投票数 */
+	/** 今天可投票数 */
 	public Long voteNum(String openid, String acode) throws VoteException {
 		ActivityVo avo = activityService.selelctActivityByCode(acode);
 		if (!avo.getStatus().equals(ActivityStatusEnum.inProgress.getCode())) {
@@ -50,12 +54,37 @@ public class VoteService implements IVoteService {
 	}
 
 	/** 投票 */
-	public void vote(List<VoteVo> votes) throws VoteException {
-
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+	public void vote(VoteVo vote) throws VoteException {
+		if (vote.getActivity_code() == null) {
+			throw new VoteException("活动编号不能玩为空");
+		}
+		if (vote.getVote_user_openid() == null) {
+			throw new VoteException("参与用户openid不能为空");
+		}
+		ActivityVo avo = activityService.selelctActivityByCode(vote.getActivity_code());
+		if (!avo.getStatus().equals(ActivityStatusEnum.inProgress.getCode())) {
+			throw new VoteException("活动不能投票");
+		}
+		for (VoteVo voteVo : vote.getVoteList()) {
+			if (voteVo.getVote_code() == null) {
+				throw new VoteException("所投作品不能为空");
+			}
+			if (voteVo.getVote_num() == null) {
+				throw new VoteException("所投票数不能为空");
+			}
+			Vote v = new Vote();
+			BeanUtils.copyProperties(voteVo, v);
+			v.setVote_date(new Date());
+			v.setActivity_code(vote.getActivity_code());
+			v.setVote_user_openid(vote.getVote_user_openid());
+			this.save(v);
+		}
 	}
 
 	/** 投票统计 */
 	public void voteReport(String acode) throws VoteException {
+		
 	}
 
 	public Serializable save(Vote vote) {
