@@ -2,9 +2,13 @@ package com.roof.vote.production.service.impl;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.roof.roof.dataaccess.api.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,6 +36,14 @@ public class ProductionService implements IProductionService {
 	@Autowired
 	private RedisTemplate redisTemplate;
 
+	public ProductionVo loadProBycode(String acode, String vcode) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("activity_code", acode);
+		map.put("vote_code", vcode);
+		ProductionVo p = (ProductionVo) productionDao.selectForObject("loadProBycode", map);
+		return p;
+	}
+
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void processPro(Long id, Boolean processval) {
 		Production p = new Production(id);
@@ -51,10 +63,20 @@ public class ProductionService implements IProductionService {
 		String key = Vote.createVoteZsetKey(acode);
 		BoundZSetOperations operations = redisTemplate.boundZSetOps(key);
 		Set<TypedTuple<String>> zset = operations.reverseRangeWithScores(0, -1);
+		// for (int i = 1; i <= zset.size(); i++) {
+		// TypedTuple<String> t = zset.iterator().
+		// }
+		int index = 0;
+		List<ProductionVo> pros = new ArrayList<ProductionVo>();
 		for (TypedTuple<String> typedTuple : zset) {
-			System.out.println("====：" + JSON.toJSONString(typedTuple));
+			index++;
+			ProductionVo vo = loadProBycode(acode, StringUtils.substring(typedTuple.getValue(),
+					typedTuple.getValue().indexOf("#") + 1, typedTuple.getValue().length()));
+			vo.setIndex(Long.valueOf(index));
+			vo.setNum(typedTuple.getScore());
+			pros.add(vo);
 		}
-		return null;
+		return pros;
 	}
 
 	public ProductionVo getPro(Long id) {

@@ -1,5 +1,7 @@
 package com.roof.vote.wechat;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.roof.roof.dataaccess.api.Page;
@@ -8,7 +10,6 @@ import org.roof.spring.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -27,6 +28,16 @@ public class VoteWechatAction {
 
 	@Autowired
 	private IProductionService productionService;
+
+	@RequestMapping("/selectPros")
+	public @ResponseBody Result selectPros(String acode, HttpServletRequest request, Model model) {
+		try {
+			List<ProductionVo> vo = productionService.selectPros(acode);
+			return new Result(Result.SUCCESS, vo);
+		} catch (Exception e) {
+			return new Result(Result.FAIL, e.getMessage());
+		}
+	}
 
 	@RequestMapping("/getPro")
 	public @ResponseBody Result getPro(Long id, HttpServletRequest request, Model model) {
