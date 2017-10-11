@@ -1,7 +1,8 @@
 package com.roof.vote.common;
 
 public enum ProductionStatusEnum {
-	waitProcess("waitProcess", "等待审核"), processed("processed", "审核通过"), cancel("cancel", "取消");
+	waitProcess("waitProcess", "等待审核"), processed("processed", "审核通过"), cancel("cancel",
+			"取消"), managecancel("managecancel", "审核不通过作废");
 
 	private String code;
 

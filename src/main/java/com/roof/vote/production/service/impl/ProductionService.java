@@ -24,6 +24,8 @@ import org.springframework.data.redis.core.BoundZSetOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductionService implements IProductionService {
@@ -33,12 +35,32 @@ public class ProductionService implements IProductionService {
 	@Autowired
 	private RedisTemplate redisTemplate;
 
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+	public void processPro(Long id, Boolean processval) {
+		Production p = new Production(id);
+		if (processval) {
+			p.setStatus(ProductionStatusEnum.processed.getCode());
+		} else {
+			p.setStatus(ProductionStatusEnum.managecancel.getCode());
+		}
+		this.updateIgnoreNull(p);
+		ProductionVo pvo = this.load(new Production(id));
+		String key = Vote.createVoteZsetKey(pvo.getActivity_code());
+		BoundZSetOperations operations = redisTemplate.boundZSetOps(key);
+		operations.add(Vote.createVoteZsetValueKey(pvo.getVote_code()), 0);
+	}
+
 	public ProductionVo getPro(Long id) {
 		ProductionVo pvo = this.load(new Production(id));
+
 		String key = Vote.createVoteZsetKey(pvo.getActivity_code());
 		BoundZSetOperations operations = redisTemplate.boundZSetOps(key);
 		Long index = operations.rank(Vote.createVoteZsetValueKey(pvo.getVote_code()));
 		pvo.setIndex(index + 1);
+		if (index.longValue() == 0) {// 第一名直接返回
+			pvo.setMarginNum(0D);
+			return pvo;
+		}
 		Set<TypedTuple<String>> zset = operations.reverseRangeByScoreWithScores(index - 1, index);
 		for (TypedTuple<String> typedTuple : zset) {
 			if (!typedTuple.getValue().equals(Vote.createVoteZsetValueKey(pvo.getVote_code()))) {
