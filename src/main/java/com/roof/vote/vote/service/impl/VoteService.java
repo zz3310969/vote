@@ -43,7 +43,7 @@ public class VoteService implements IVoteService {
 		map.put("openid", openid);
 		map.put("acode", acode);
 		
-		voteDao.selectForObject("",map);
+		voteDao.selectForObject("selectvoteNum",map);
 		
 		
 		return null;

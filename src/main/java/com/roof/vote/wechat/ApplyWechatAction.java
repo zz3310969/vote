@@ -15,8 +15,8 @@ import com.roof.vote.production.entity.Production;
 import com.roof.vote.production.entity.ProductionVo;
 
 @Controller
-@RequestMapping("vote/wechat/applyAction")
-public class ApplyAction {
+@RequestMapping("vote/wechat/applyWechatAction")
+public class ApplyWechatAction {
 	@Autowired
 	private IActivityService activityService;
 

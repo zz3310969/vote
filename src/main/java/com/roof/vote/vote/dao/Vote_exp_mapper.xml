@@ -7,7 +7,7 @@
 		t1.vote_date, t1.vote_code
 	</sql>
 
-	<select id="selectVote" resultType="com.roof.vote.vote.entity.VoteVo">
+	<select id="selectvoteNum" resultType="com.roof.vote.vote.entity.VoteVo">
 		select
 		<include refid="columns" />
 		from v_vote

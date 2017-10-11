@@ -18,8 +18,8 @@ import com.roof.vote.vote.entity.VoteVo;
 import com.roof.vote.vote.service.api.IVoteService;
 
 @Controller
-@RequestMapping("vote/wechat/voteAction")
-public class VoteAction {
+@RequestMapping("vote/wechat/voteWechatAction")
+public class VoteWechatAction {
 	@Autowired
 	private IVoteService voteService;
 
