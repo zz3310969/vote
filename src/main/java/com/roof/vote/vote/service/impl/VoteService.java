@@ -69,27 +69,24 @@ public class VoteService implements IVoteService {
 		if (vote.getVote_user_openid() == null) {
 			throw new VoteException("参与用户openid不能为空");
 		}
+		if (vote.getVote_code() == null) {
+			throw new VoteException("所投作品不能为空");
+		}
+		if (vote.getVote_num() == null) {
+			throw new VoteException("所投票数不能为空");
+		}
 		ActivityVo avo = activityService.selelctActivityByCode(vote.getActivity_code());
 		if (!avo.getStatus().equals(ActivityStatusEnum.inProgress.getCode())) {
 			throw new VoteException("活动不能投票");
 		}
-		for (VoteVo voteVo : vote.getVoteList()) {
-			if (voteVo.getVote_code() == null) {
-				throw new VoteException("所投作品不能为空");
-			}
-			if (voteVo.getVote_num() == null) {
-				throw new VoteException("所投票数不能为空");
-			}
-			Vote v = new Vote();
-			BeanUtils.copyProperties(voteVo, v);
-			v.setVote_date(new Date());
-			v.setActivity_code(vote.getActivity_code());
-			v.setVote_user_openid(vote.getVote_user_openid());
-			this.save(v);
-			// zset+1
-			this.redisIncrement(vote.getActivity_code(), voteVo.getVote_code(),v.getVote_num());
-		}
-		// 进行redis加
+		Vote v = new Vote();
+		BeanUtils.copyProperties(vote, v);
+		v.setVote_date(new Date());
+		v.setActivity_code(vote.getActivity_code());
+		v.setVote_user_openid(vote.getVote_user_openid());
+		this.save(v);
+		// zset+1
+		this.redisIncrement(vote.getActivity_code(), vote.getVote_code(), vote.getVote_num());
 
 	}
 
