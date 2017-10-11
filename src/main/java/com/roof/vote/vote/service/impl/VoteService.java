@@ -27,26 +27,26 @@ public class VoteService implements IVoteService {
 	private IActivityService activityService;
 
 	/** 是否可以投票 */
-	public String canVote(String openid, String acode) throws VoteException {
-		ActivityVo avo = activityService.selelctActivityByCode(acode);
-		if (!avo.getStatus().equals(ActivityStatusEnum.inProgress.getCode())) {
-			throw new VoteException("活动不能投票");
+	public Boolean canVote(String openid, String acode) throws VoteException {
+		Long l = this.voteNum(openid, acode);
+		if (l > 0) {
+			return true;
 		}
-//		Long 
-		
-		return null;
+		return false;
 	}
 
 	/** 可投票数 */
 	public Long voteNum(String openid, String acode) throws VoteException {
-		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("openid", openid);
-		map.put("acode", acode);
-		
-		voteDao.selectForObject("selectvoteNum",map);
-		
-		
-		return null;
+		ActivityVo avo = activityService.selelctActivityByCode(acode);
+		if (!avo.getStatus().equals(ActivityStatusEnum.inProgress.getCode())) {
+			throw new VoteException("活动不能投票");
+		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("vote_user_openid", openid);
+		map.put("activity_code", acode);
+		Long l = (Long) voteDao.selectForObject("selectvoteNum", map);
+		long v = avo.getVote_limit().longValue() - l.longValue();
+		return new Long(v);
 	}
 
 	/** 投票 */

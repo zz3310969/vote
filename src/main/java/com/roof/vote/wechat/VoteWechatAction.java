@@ -11,9 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.roof.vote.activityuser.entity.ActivityUserVo;
-import com.roof.vote.production.entity.Production;
-import com.roof.vote.production.entity.ProductionVo;
 import com.roof.vote.vote.entity.VoteVo;
 import com.roof.vote.vote.service.api.IVoteService;
 
@@ -26,7 +23,7 @@ public class VoteWechatAction {
 	@RequestMapping("/canVote")
 	public @ResponseBody Result canVote(String openid, String acode, HttpServletRequest request, Model model) {
 		try {
-			String s = voteService.canVote(openid, acode);
+			Boolean s = voteService.canVote(openid, acode);
 			return new Result(Result.SUCCESS, s);
 		} catch (Exception e) {
 			return new Result(Result.FAIL, e.getMessage());
