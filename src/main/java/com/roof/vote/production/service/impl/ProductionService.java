@@ -16,6 +16,7 @@ import com.roof.vote.vote.entity.Vote;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.BoundValueOperations;
+import org.springframework.data.redis.core.BoundZSetOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,14 @@ public class ProductionService implements IProductionService {
 	@SuppressWarnings("rawtypes")
 	@Autowired
 	private RedisTemplate redisTemplate;
+
+	public ProductionVo getPro(Long id) {
+		ProductionVo pvo = this.load(new Production(id));
+		
+
+		return null;
+
+	}
 
 	public List<ProductionVo> selectProductByuserid(Long user_id) {
 		List<ProductionVo> list = (List<ProductionVo>) productionDao.selectForList("selectProductByuserid", user_id);
@@ -79,9 +88,9 @@ public class ProductionService implements IProductionService {
 		productionDao.page(page, production);
 		List<ProductionVo> list = (List<ProductionVo>) page.getDataList();
 		for (ProductionVo productionVo : list) {
-			String key = Vote.createProductVoteKey(productionVo.getActivity_code(), productionVo.getVote_code());
-			BoundValueOperations<String, Long> operations = redisTemplate.boundValueOps(key);
-			productionVo.setNum(operations.get());
+			String key = Vote.createVoteZsetKey(productionVo.getActivity_code());
+			BoundZSetOperations operations = redisTemplate.boundZSetOps(key);
+			productionVo.setNum(operations.score(Vote.createVoteZsetValueKey(productionVo.getVote_code())));
 		}
 		page.setDataList(list);
 		return page;

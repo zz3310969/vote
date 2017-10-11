@@ -10,6 +10,9 @@ import org.roof.roof.dataaccess.api.Page;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.BoundValueOperations;
+import org.springframework.data.redis.core.BoundZSetOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +32,10 @@ public class VoteService implements IVoteService {
 
 	@Autowired
 	private IActivityService activityService;
+
+	@SuppressWarnings("rawtypes")
+	@Autowired
+	private RedisTemplate redisTemplate;
 
 	/** 今天是否可以投票 */
 	public Boolean canVote(String openid, String acode) throws VoteException {
@@ -79,7 +86,17 @@ public class VoteService implements IVoteService {
 			v.setActivity_code(vote.getActivity_code());
 			v.setVote_user_openid(vote.getVote_user_openid());
 			this.save(v);
+			// zset+1
+			this.redisIncrement(vote.getActivity_code(), voteVo.getVote_code());
 		}
+		// 进行redis加
+
+	}
+
+	public void redisIncrement(String acode, String vcode) {
+		String zsetKey = Vote.createVoteZsetKey(acode);
+		BoundZSetOperations operations = redisTemplate.boundZSetOps(zsetKey);
+		operations.incrementScore(Vote.createVoteZsetValueKey(vcode), 1);
 	}
 
 	/** 投票统计 */

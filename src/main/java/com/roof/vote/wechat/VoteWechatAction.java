@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.roof.vote.common.ProductionStatusEnum;
 import com.roof.vote.production.entity.Production;
 import com.roof.vote.production.service.api.IProductionService;
 import com.roof.vote.vote.entity.VoteVo;
@@ -25,11 +26,26 @@ public class VoteWechatAction {
 	@Autowired
 	private IProductionService productionService;
 
+	@RequestMapping("/getPro")
+	public @ResponseBody Result getPro(Production product, HttpServletRequest request, Model model) {
+		try {
+			Page page = PageUtils.createPage(request);
+			page = productionService.page(page, product);
+			return new Result(Result.SUCCESS, page);
+		} catch (Exception e) {
+			return new Result(Result.FAIL, e.getMessage());
+		}
+	}
+
 	// 根据活动查询，所有审核通过的作品列表,以及对应的票数
 	@RequestMapping("/pagePros")
 	public @ResponseBody Result pagePros(Production product, HttpServletRequest request, Model model) {
 		try {
 			Page page = PageUtils.createPage(request);
+			if (product == null) {
+				product = new Production();
+			}
+			product.setStatus(ProductionStatusEnum.processed.getCode());
 			page = productionService.page(page, product);
 			return new Result(Result.SUCCESS, page);
 		} catch (Exception e) {

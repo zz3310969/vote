@@ -37,18 +37,20 @@ public class ActivityServiceTest extends AbstractJUnit4SpringContextTests {
 
 	@Test
 	public void testApply() {
-		ProductionVo pvo = new ProductionVo();
-		pvo.setActivity_code("A-20171011-000002");
-		pvo.setImg_src("xxxxxxx");
-		pvo.setName("我要参加比赛1");
-		pvo.setRemark("我是鸦军");
-		ActivityUserVo u = new ActivityUserVo();
-		u.setActivity_code("A-20171011-000002");
-		u.setName("整了两天1");
-		u.setOpenid("ddsdfdsfdsfsdfsdfsdfsdfsd111111");
-		u.setTel("1232132132321312");
-		pvo.setUser(u);
-		activityService.apply(pvo);
+		for (int i = 0; i < 20; i++) {
+			ProductionVo pvo = new ProductionVo();
+			pvo.setActivity_code("A-20171011-000002");
+			pvo.setImg_src("xxxxxxx");
+			pvo.setName("郑量天来比赛" + i);
+			pvo.setRemark("我是天天" + i);
+			ActivityUserVo u = new ActivityUserVo();
+			u.setActivity_code("A-20171011-000002");
+			u.setName("整了两天1" + i);
+			u.setOpenid("aaaa" + i);
+			u.setTel("1332533321");
+			pvo.setUser(u);
+			activityService.apply(pvo);
+		}
 	}
 
 	@Test

@@ -80,7 +80,28 @@ public class Vote implements Serializable {
 		this.vote_code = vote_code;
 	}
 
+	/**
+	 * 活动投票作品编号rediskey
+	 * 
+	 * @param acode
+	 * @param vcode
+	 * @return
+	 */
 	public static String createProductVoteKey(String acode, String vcode) {
 		return ActivityService.VOTEPRODUCTIONPREFIX + acode + "#" + vcode;
+	}
+
+	/**
+	 * 排序key
+	 * 
+	 * @param acode
+	 * @return
+	 */
+	public static String createVoteZsetKey(String acode) {
+		return ActivityService.VOTEZSET + acode;
+	}
+
+	public static String createVoteZsetValueKey(String vcode) {
+		return "VCODE#" + vcode;
 	}
 }

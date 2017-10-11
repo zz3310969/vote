@@ -29,7 +29,9 @@ public class ProductionVo extends Production {
 
 	private String username;// 参赛用户名
 
-	private Long num;// 票数
+	private Double num;// 当前票数
+	
+//	private 
 
 	public ProductionVo() {
 		super();
@@ -112,11 +114,11 @@ public class ProductionVo extends Production {
 		this.username = username;
 	}
 
-	public Long getNum() {
+	public Double getNum() {
 		return num;
 	}
 
-	public void setNum(Long num) {
+	public void setNum(Double num) {
 		this.num = num;
 	}
 
