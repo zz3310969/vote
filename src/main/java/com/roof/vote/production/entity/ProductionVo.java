@@ -30,8 +30,8 @@ public class ProductionVo extends Production {
 	private String username;// 参赛用户名
 
 	private Double num;// 当前票数
-	
-//	private 
+
+	// private
 
 	public ProductionVo() {
 		super();

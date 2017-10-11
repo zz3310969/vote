@@ -30,7 +30,6 @@ public class ProductionService implements IProductionService {
 
 	public ProductionVo getPro(Long id) {
 		ProductionVo pvo = this.load(new Production(id));
-		
 
 		return null;
 
@@ -90,7 +89,8 @@ public class ProductionService implements IProductionService {
 		for (ProductionVo productionVo : list) {
 			String key = Vote.createVoteZsetKey(productionVo.getActivity_code());
 			BoundZSetOperations operations = redisTemplate.boundZSetOps(key);
-			productionVo.setNum(operations.score(Vote.createVoteZsetValueKey(productionVo.getVote_code())));
+			Double d = operations.score(Vote.createVoteZsetValueKey(productionVo.getVote_code()));
+			productionVo.setNum(d != null ? d : 0D);
 		}
 		page.setDataList(list);
 		return page;
