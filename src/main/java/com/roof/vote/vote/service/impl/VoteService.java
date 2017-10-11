@@ -56,7 +56,7 @@ public class VoteService implements IVoteService {
 		map.put("vote_user_openid", openid);
 		map.put("activity_code", acode);
 		Long l = (Long) voteDao.selectForObject("selectvoteNum", map);
-		long v = avo.getVote_limit().longValue() - l.longValue();
+		long v = avo.getVote_limit().longValue() - (l != null ? l : 0);
 		return new Long(v);
 	}
 
@@ -87,16 +87,16 @@ public class VoteService implements IVoteService {
 			v.setVote_user_openid(vote.getVote_user_openid());
 			this.save(v);
 			// zset+1
-			this.redisIncrement(vote.getActivity_code(), voteVo.getVote_code());
+			this.redisIncrement(vote.getActivity_code(), voteVo.getVote_code(),v.getVote_num());
 		}
 		// 进行redis加
 
 	}
 
-	public void redisIncrement(String acode, String vcode) {
+	public void redisIncrement(String acode, String vcode, Long num) {
 		String zsetKey = Vote.createVoteZsetKey(acode);
 		BoundZSetOperations operations = redisTemplate.boundZSetOps(zsetKey);
-		operations.incrementScore(Vote.createVoteZsetValueKey(vcode), 1);
+		operations.incrementScore(Vote.createVoteZsetValueKey(vcode), num);
 	}
 
 	/** 投票统计 */
