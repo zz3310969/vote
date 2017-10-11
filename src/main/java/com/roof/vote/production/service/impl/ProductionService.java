@@ -47,6 +47,16 @@ public class ProductionService implements IProductionService {
 		operations.add(Vote.createVoteZsetValueKey(pvo.getVote_code()), 0);
 	}
 
+	public List<ProductionVo> selectPros(String acode) {
+		String key = Vote.createVoteZsetKey(acode);
+		BoundZSetOperations operations = redisTemplate.boundZSetOps(key);
+		Set<TypedTuple<String>> zset = operations.reverseRangeWithScores(0, -1);
+		for (TypedTuple<String> typedTuple : zset) {
+			System.out.println("====：" + JSON.toJSONString(typedTuple));
+		}
+		return null;
+	}
+
 	public ProductionVo getPro(Long id) {
 		ProductionVo pvo = this.load(new Production(id));
 
@@ -54,27 +64,24 @@ public class ProductionService implements IProductionService {
 		BoundZSetOperations operations = redisTemplate.boundZSetOps(key);
 		Long index = operations.reverseRank(Vote.createVoteZsetValueKey(pvo.getVote_code()));
 		pvo.setIndex(index + 1);
-		System.out.println(index);
+		// System.out.println(Vote.createVoteZsetValueKey(pvo.getVote_code()) +
+		// "目前排名:" + index);
 		if (index.longValue() == 0) {// 第一名直接返回
 			pvo.setMarginNum(0D);
 			return pvo;
 		}
-		Set<TypedTuple<String>> zset = operations.reverseRangeByScoreWithScores(index - 1, index);
-		Set<TypedTuple<String>> zset1 = operations.reverseRangeByScoreWithScores(index, index + 1);
+		Set<TypedTuple<String>> zset = operations.reverseRangeWithScores(index - 1, index);
 		for (TypedTuple<String> typedTuple : zset) {
-			System.out.println(JSON.toJSONString(typedTuple));
-			// if
-			// (!typedTuple.getValue().equals(Vote.createVoteZsetValueKey(pvo.getVote_code())))
-			// {
-			// pvo.setPerNum(typedTuple.getScore());
-			// }
+			if (!typedTuple.getValue().equals(Vote.createVoteZsetValueKey(pvo.getVote_code()))) {
+				pvo.setPerNum(typedTuple.getScore());
+			}
+			if (typedTuple.getValue().equals(Vote.createVoteZsetValueKey(pvo.getVote_code()))) {
+				pvo.setNum(typedTuple.getScore());
+			}
 		}
 
-		for (TypedTuple<String> typedTuple : zset1) {
-			System.out.println(JSON.toJSONString(typedTuple));
-		}
 		// 票差额
-		if (pvo.getPerNum() != null) {
+		if (pvo.getPerNum() == null) {
 			pvo.setMarginNum(0D);
 		} else {
 			pvo.setMarginNum(new BigDecimal(pvo.getPerNum()).subtract(new BigDecimal(pvo.getNum())).doubleValue());

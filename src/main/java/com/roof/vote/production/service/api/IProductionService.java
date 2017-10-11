@@ -8,6 +8,8 @@ import com.roof.vote.production.entity.Production;
 import com.roof.vote.production.entity.ProductionVo;
 
 public interface IProductionService {
+	public List<ProductionVo> selectPros(String acode);
+
 	public ProductionVo getPro(Long id);
 
 	public void processPro(Long id, Boolean processval);

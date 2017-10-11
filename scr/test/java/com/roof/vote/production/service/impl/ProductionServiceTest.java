@@ -34,7 +34,16 @@ public class ProductionServiceTest extends AbstractJUnit4SpringContextTests {
 
 	@Test
 	public void testgetPro() {
-		ProductionVo vo = productionService.getPro(3L);
+//		List<ProductionVo> vos = productionService.selectForList(new Production());
+//		for (ProductionVo productionVo : vos) {
+			ProductionVo vo = productionService.getPro(4L);
+			System.out.println(JSON.toJSONString(vo));
+//		}
+	}
+
+	@Test
+	public void testgetPros() {
+		List<ProductionVo> vo = productionService.selectPros("A-20171011-000002");
 		System.out.println(JSON.toJSONString(vo));
 	}
 
