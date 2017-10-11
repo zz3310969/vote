@@ -27,6 +27,10 @@ public class ProductionVo extends Production {
 
 	private Long vote_limit;
 
+	private String username;// 参赛用户名
+
+	private Long num;// 票数
+
 	public ProductionVo() {
 		super();
 	}
@@ -98,6 +102,22 @@ public class ProductionVo extends Production {
 
 	public void setVote_limit(Long vote_limit) {
 		this.vote_limit = vote_limit;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public Long getNum() {
+		return num;
+	}
+
+	public void setNum(Long num) {
+		this.num = num;
 	}
 
 }

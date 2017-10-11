@@ -57,7 +57,7 @@ public class VoteService implements IVoteService {
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void vote(VoteVo vote) throws VoteException {
 		if (vote.getActivity_code() == null) {
-			throw new VoteException("活动编号不能玩为空");
+			throw new VoteException("活动编号不能为空");
 		}
 		if (vote.getVote_user_openid() == null) {
 			throw new VoteException("参与用户openid不能为空");
@@ -84,7 +84,7 @@ public class VoteService implements IVoteService {
 
 	/** 投票统计 */
 	public void voteReport(String acode) throws VoteException {
-		
+
 	}
 
 	public Serializable save(Vote vote) {

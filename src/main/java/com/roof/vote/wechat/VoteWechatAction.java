@@ -19,7 +19,12 @@ import com.roof.vote.vote.service.api.IVoteService;
 public class VoteWechatAction {
 	@Autowired
 	private IVoteService voteService;
-
+	
+	//根据活动查询，所有审核通过的作品列表,以及对应的票数
+	
+	
+	
+	
 	@RequestMapping("/canVote")
 	public @ResponseBody Result canVote(String openid, String acode, HttpServletRequest request, Model model) {
 		try {

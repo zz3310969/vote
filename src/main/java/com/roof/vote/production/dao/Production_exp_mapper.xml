@@ -27,18 +27,19 @@
 
 	<select id="selectProductionPage" resultType="com.roof.vote.production.entity.ProductionVo">
 		select
-		<include refid="columnsAs" />
+		<include refid="columnsAs" />,
+		t3.name as username
 		from
-		v_production t1
+		v_production t1 
 		join
 		(SELECT
 		id
 		from
-		v_production
+		v_production 
 		where 1=1
 		<include refid="conds" />
-		order by id desc
-		limit #{firstrownum}, #{limit}) t2
+		order by id asc
+		limit #{firstrownum}, #{limit}) t2 left join v_activity_user t3 on t1.user_id = t3.id
 		where t1.id = t2.id
 	</select>
 

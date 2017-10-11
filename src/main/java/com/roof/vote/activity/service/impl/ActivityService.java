@@ -36,7 +36,18 @@ public class ActivityService implements IActivityService {
 	private IActivityDao activityDao;
 
 	public final static String CODEPREFIX = "A";
-	public final static String VOTECODEPREFIX = "VOTE#NUMBER";
+	/**
+	 * 当前活动对应的作品序号
+	 */
+	public final static String VOTECODEPREFIX = "VN#";
+	/**
+	 * 当前活动对应作品票数
+	 */
+	public final static String VOTEPRODUCTIONPREFIX = "VP#";
+	/**
+	 * 当前活动对应的票数排名
+	 */
+	public final static String VOTEZSET = "VZSET#";
 
 	@SuppressWarnings("rawtypes")
 	@Autowired
@@ -61,8 +72,8 @@ public class ActivityService implements IActivityService {
 	}
 
 	@SuppressWarnings("unchecked")
-	public String createVoteCode(Date date) {
-		String key = VOTECODEPREFIX;
+	public String createVoteCode(Date date, String acode) {
+		String key = VOTECODEPREFIX + acode;
 		BoundValueOperations<String, Long> operations = redisTemplate.boundValueOps(key);// .increment(1);
 		Long l = operations.increment(1);
 		// operations.expire(2, TimeUnit.DAYS);
@@ -125,7 +136,7 @@ public class ActivityService implements IActivityService {
 		p.setStatus(ProductionStatusEnum.waitProcess.getCode());
 		p.setUpload_date(new Date());
 		p.setUser_id(uservo.getId());
-		p.setVote_code(this.createVoteCode(new Date()));
+		p.setVote_code(this.createVoteCode(new Date(), pvo.getActivity_code()));
 		productionService.save(p);
 		return p;
 	}

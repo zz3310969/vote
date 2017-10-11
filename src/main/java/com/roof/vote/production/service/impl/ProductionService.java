@@ -4,19 +4,28 @@ import java.io.Serializable;
 import java.util.List;
 import org.roof.roof.dataaccess.api.Page;
 
+import com.roof.vote.activity.service.impl.ActivityService;
 import com.roof.vote.common.ActivityStatusEnum;
 import com.roof.vote.common.ProductionStatusEnum;
 import com.roof.vote.production.dao.api.IProductionDao;
 import com.roof.vote.production.entity.Production;
 import com.roof.vote.production.entity.ProductionVo;
 import com.roof.vote.production.service.api.IProductionService;
+import com.roof.vote.vote.entity.Vote;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.BoundValueOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProductionService implements IProductionService {
 	private IProductionDao productionDao;
+
+	@SuppressWarnings("rawtypes")
+	@Autowired
+	private RedisTemplate redisTemplate;
 
 	public List<ProductionVo> selectProductByuserid(Long user_id) {
 		List<ProductionVo> list = (List<ProductionVo>) productionDao.selectForList("selectProductByuserid", user_id);
@@ -67,7 +76,15 @@ public class ProductionService implements IProductionService {
 	}
 
 	public Page page(Page page, Production production) {
-		return productionDao.page(page, production);
+		productionDao.page(page, production);
+		List<ProductionVo> list = (List<ProductionVo>) page.getDataList();
+		for (ProductionVo productionVo : list) {
+			String key = Vote.createProductVoteKey(productionVo.getActivity_code(), productionVo.getVote_code());
+			BoundValueOperations<String, Long> operations = redisTemplate.boundValueOps(key);
+			productionVo.setNum(operations.get());
+		}
+		page.setDataList(list);
+		return page;
 	}
 
 	@Autowired
