@@ -1,9 +1,9 @@
 package com.roof.vote.wechat;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
+import org.roof.roof.dataaccess.api.Page;
+import org.roof.roof.dataaccess.api.PageUtils;
 import org.roof.spring.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.roof.vote.production.entity.Production;
+import com.roof.vote.production.service.api.IProductionService;
 import com.roof.vote.vote.entity.VoteVo;
 import com.roof.vote.vote.service.api.IVoteService;
 
@@ -19,12 +21,22 @@ import com.roof.vote.vote.service.api.IVoteService;
 public class VoteWechatAction {
 	@Autowired
 	private IVoteService voteService;
-	
-	//根据活动查询，所有审核通过的作品列表,以及对应的票数
-	
-	
-	
-	
+
+	@Autowired
+	private IProductionService productionService;
+
+	// 根据活动查询，所有审核通过的作品列表,以及对应的票数
+	@RequestMapping("/pagePros")
+	public @ResponseBody Result pagePros(Production product, HttpServletRequest request, Model model) {
+		try {
+			Page page = PageUtils.createPage(request);
+			page = productionService.page(page, product);
+			return new Result(Result.SUCCESS, page);
+		} catch (Exception e) {
+			return new Result(Result.FAIL, e.getMessage());
+		}
+	}
+
 	@RequestMapping("/canVote")
 	public @ResponseBody Result canVote(String openid, String acode, HttpServletRequest request, Model model) {
 		try {
