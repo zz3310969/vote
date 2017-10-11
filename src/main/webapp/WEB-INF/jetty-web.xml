@@ -5,13 +5,13 @@
 		<New class="org.eclipse.jetty.util.resource.ResourceCollection">
 			<Arg>
 				<Array type="java.lang.String">
-					<Item>E:\Users\hc_workspace_2016\webc</Item>
-					<Item>E:\git\selin\selin-web\src\main\webapp</Item>
-					<Item>E:\git\selin\selin-web\overlays\org.roof.roof-web-cache-webapp-3.0.1\</Item>
-					<Item>E:\git\selin\selin-web\overlays\org.roof.roof-web-menu-webapp-3.0.1\</Item>
-					<Item>E:\git\selin\selin-web\overlays\org.roof.roof-web-org-webapp-3.0.1\</Item>
-					<Item>E:\git\selin\selin-web\overlays\org.roof.roof-web-user-webapp-3.0.1\</Item>
-					<Item>E:\git\selin\selin-web\overlays\org.roof.roof-web-dictionary-webapp-3.0.1\</Item>
+					<Item>E:\workspace-git\roof\webc</Item>
+					<Item>E:\workspace-git\selin\selin-web\src\main\webapp</Item>
+					<Item>E:\workspace-git\selin\selin-web\overlays\org.roof.roof-web-cache-webapp-3.0.1\</Item>
+					<Item>E:\workspace-git\selin\selin-web\overlays\org.roof.roof-web-menu-webapp-3.0.1\</Item>
+					<Item>E:\workspace-git\selin\selin-web\overlays\org.roof.roof-web-org-webapp-3.0.1\</Item>
+					<Item>E:\workspace-git\selin\selin-web\overlays\org.roof.roof-web-user-webapp-3.0.1\</Item>
+					<Item>E:\workspace-git\selin\selin-web\overlays\org.roof.roof-web-dictionary-webapp-3.0.1\</Item>
 				</Array>
 			</Arg>
 		</New>

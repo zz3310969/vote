@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.roof.vote.activityuser.dao">
+	<sql id="columnsAs">
+		t1.id, t1.name, t1.tel, t1.activity_code, t1.openid
+	</sql>
+
+	<select id="loadByOpenid" resultType="com.roof.vote.activityuser.entity.ActivityUserVo">
+		select
+		<include refid="columns" />
+		from v_activity_user
+		where 1=1
+		and openid = #{openid}
+	</select>
+
+	<select id="selectUserByCode" resultType="com.roof.vote.activityuser.entity.ActivityUserVo">
+		select
+		<include refid="columns" />
+		from v_activity_user
+		where 1=1
+		<if test="name != null and name != ''">
+			and name = #{name}
+		</if>
+		<if test="tel != null and tel != ''">
+			and tel = #{tel}
+		</if>
+		<if test="activity_code != null and activity_code != ''">
+			and activity_code = #{activity_code}
+		</if>
+		<if test="openid != null and openid != ''">
+			and openid = #{openid}
+		</if>
+	</select>
+
+	<select id="selectActivityUserPage" resultType="com.roof.vote.activityuser.entity.ActivityUserVo">
+		select
+		<include refid="columnsAs" />
+		from
+		v_activity_user t1
+		join
+		(SELECT
+		id
+		from
+		v_activity_user
+		where 1=1
+		<include refid="conds" />
+		order by id desc
+		limit #{firstrownum}, #{limit}) t2
+		where t1.id = t2.id
+	</select>
+
+	<select id="selectActivityUserCount" resultType="java.lang.Long">
+		select
+		count(id)
+		from v_activity_user
+		where 1=1
+		<include refid="conds" />
+	</select>
+</mapper>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.roof.vote.activityuser.dao">
+
+	<sql id="columns">
+		id, name, tel, activity_code, openid
+	</sql>
+	<sql id="vals">
+		#{id}, #{name}, #{tel}, #{activity_code}, #{openid}
+	</sql>
+	<sql id="conds">
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="name != null and name != ''">
+			and name = #{name}
+		</if>
+		<if test="tel != null and tel != ''">
+			and tel = #{tel}
+		</if>
+		<if test="activity_code != null and activity_code != ''">
+			and activity_code = #{activity_code}
+		</if>
+		<if test="openid != null and openid != ''">
+			and openid = #{openid}
+		</if>
+	</sql>
+
+	<insert id="saveActivityUser" parameterType="com.roof.vote.activityuser.entity.ActivityUser" useGeneratedKeys="true" keyProperty="id">
+		<selectKey keyProperty="id" resultType="Long" order="AFTER">
+			select last_insert_id()
+		</selectKey>
+		insert into v_activity_user (<include refid="columns" />) 
+		values (<include refid="vals" />)
+	</insert>
+
+	<delete id="deleteActivityUser">
+		delete from v_activity_user
+		where id=#{id} 
+	</delete>
+
+	<delete id="deleteByExampleActivityUser">
+		delete from v_activity_user
+		where 1=1
+		<include refid="conds" />
+	</delete>
+
+	<update id="updateActivityUser">
+		update v_activity_user
+		<set>
+			id=#{id}, 
+			name=#{name}, 
+			tel=#{tel}, 
+			activity_code=#{activity_code}, 
+			openid=#{openid}
+		</set>
+		where id=#{id} 
+	</update>
+
+	<update id="updateIgnoreNullActivityUser">
+		update v_activity_user
+		<set>
+		<if test="id != null">
+			id=#{id}, 
+		</if>
+		<if test="name != null and name != ''">
+			name=#{name}, 
+		</if>
+		<if test="tel != null and tel != ''">
+			tel=#{tel}, 
+		</if>
+		<if test="activity_code != null and activity_code != ''">
+			activity_code=#{activity_code}, 
+		</if>
+		<if test="openid != null and openid != ''">
+			openid=#{openid}
+		</if>
+		</set>
+		where id=#{id} 
+	</update>
+
+	<update id="updateByExampleActivityUser">
+		update v_activity_user
+		<set>
+			<if test="id != null">
+			id=#{id}, 
+			</if>
+			<if test="name != null and name != ''">
+			name=#{name}, 
+			</if>
+			<if test="tel != null and tel != ''">
+			tel=#{tel}, 
+			</if>
+			<if test="activity_code != null and activity_code != ''">
+			activity_code=#{activity_code}, 
+			</if>
+			<if test="openid != null and openid != ''">
+			openid=#{openid}
+			</if>
+		</set>
+	where 1=1
+		<include refid="conds" />
+	</update>
+	
+	<select id="loadActivityUser" resultType="com.roof.vote.activityuser.entity.ActivityUserVo">
+		select 
+		<include refid="columns"/>
+		from v_activity_user
+		where id=#{id} 
+	</select>
+	
+	<select id="selectActivityUser" resultType="com.roof.vote.activityuser.entity.ActivityUserVo">
+		select 
+		<include refid="columns"/>
+		from v_activity_user
+		where 1=1
+		<include refid="conds" />
+	</select>
+</mapper>

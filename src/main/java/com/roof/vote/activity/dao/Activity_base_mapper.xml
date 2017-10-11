@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.roof.vote.activity.dao">
+
+	<sql id="columns">
+		id, name, code, remark, apply_start_time, apply_end_time,
+		vote_start_time, vote_end_time, status, vote_rule, vote_limit,
+		create_date, update_date
+	</sql>
+	<sql id="vals">
+		#{id}, #{name}, #{code}, #{remark}, #{apply_start_time},
+		#{apply_end_time}, #{vote_start_time}, #{vote_end_time}, #{status},
+		#{vote_rule}, #{vote_limit}, #{create_date}, #{update_date}
+	</sql>
+	<sql id="conds">
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="name != null and name != ''">
+			and name = #{name}
+		</if>
+		<if test="code != null and code != ''">
+			and code = #{code}
+		</if>
+		<if test="remark != null and remark != ''">
+			and remark = #{remark}
+		</if>
+		<if test="apply_start_time != null">
+			and apply_start_time = #{apply_start_time}
+		</if>
+		<if test="apply_end_time != null">
+			and apply_end_time = #{apply_end_time}
+		</if>
+		<if test="vote_start_time != null">
+			and vote_start_time = #{vote_start_time}
+		</if>
+		<if test="vote_end_time != null">
+			and vote_end_time = #{vote_end_time}
+		</if>
+		<if test="status != null and status != ''">
+			and status = #{status}
+		</if>
+		<if test="vote_rule != null and vote_rule != ''">
+			and vote_rule = #{vote_rule}
+		</if>
+		<if test="vote_limit != null">
+			and vote_limit = #{vote_limit}
+		</if>
+		<if test="create_date != null">
+			and create_date = #{create_date}
+		</if>
+		<if test="update_date != null">
+			and update_date = #{update_date}
+		</if>
+	</sql>
+
+	<insert id="saveActivity" parameterType="com.roof.vote.activity.entity.Activity"
+		useGeneratedKeys="true" keyProperty="id">
+		<selectKey keyProperty="id" resultType="Long" order="AFTER">
+			select
+			last_insert_id()
+		</selectKey>
+		insert into v_activity (
+		<include refid="columns" />
+		)
+		values (
+		<include refid="vals" />
+		)
+	</insert>
+
+	<delete id="deleteActivity">
+		delete from v_activity
+		where id=#{id}
+	</delete>
+
+	<delete id="deleteByExampleActivity">
+		delete from v_activity
+		where 1=1
+		<include refid="conds" />
+	</delete>
+
+	<update id="updateActivity">
+		update v_activity
+		<set>
+			id=#{id},
+			name=#{name},
+			code=#{code},
+			remark=#{remark},
+			apply_start_time=#{apply_start_time},
+			apply_end_time=#{apply_end_time},
+			vote_start_time=#{vote_start_time},
+			vote_end_time=#{vote_end_time},
+			status=#{status},
+			vote_rule=#{vote_rule},
+			vote_limit=#{vote_limit},
+			create_date=#{create_date},
+			update_date=#{update_date}
+		</set>
+		where id=#{id}
+	</update>
+
+	<update id="updateIgnoreNullActivity">
+		update v_activity
+		<set>
+			<if test="id != null">
+				id=#{id},
+			</if>
+			<if test="name != null and name != ''">
+				name=#{name},
+			</if>
+			<if test="code != null and code != ''">
+				code=#{code},
+			</if>
+			<if test="remark != null and remark != ''">
+				remark=#{remark},
+			</if>
+			<if test="apply_start_time != null">
+				apply_start_time=#{apply_start_time},
+			</if>
+			<if test="apply_end_time != null">
+				apply_end_time=#{apply_end_time},
+			</if>
+			<if test="vote_start_time != null">
+				vote_start_time=#{vote_start_time},
+			</if>
+			<if test="vote_end_time != null">
+				vote_end_time=#{vote_end_time},
+			</if>
+			<if test="status != null and status != ''">
+				status=#{status},
+			</if>
+			<if test="vote_rule != null and vote_rule != ''">
+				vote_rule=#{vote_rule},
+			</if>
+			<if test="vote_limit != null">
+				vote_limit=#{vote_limit},
+			</if>
+			<if test="create_date != null">
+				create_date=#{create_date},
+			</if>
+			<if test="update_date != null">
+				update_date=#{update_date}
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+
+	<update id="updateByExampleActivity">
+		update v_activity
+		<set>
+			<if test="id != null">
+				id=#{id},
+			</if>
+			<if test="name != null and name != ''">
+				name=#{name},
+			</if>
+			<if test="code != null and code != ''">
+				code=#{code},
+			</if>
+			<if test="remark != null and remark != ''">
+				remark=#{remark},
+			</if>
+			<if test="apply_start_time != null">
+				apply_start_time=#{apply_start_time},
+			</if>
+			<if test="apply_end_time != null">
+				apply_end_time=#{apply_end_time},
+			</if>
+			<if test="vote_start_time != null">
+				vote_start_time=#{vote_start_time},
+			</if>
+			<if test="vote_end_time != null">
+				vote_end_time=#{vote_end_time},
+			</if>
+			<if test="status != null and status != ''">
+				status=#{status},
+			</if>
+			<if test="vote_rule != null and vote_rule != ''">
+				vote_rule=#{vote_rule},
+			</if>
+			<if test="vote_limit != null">
+				vote_limit=#{vote_limit},
+			</if>
+			<if test="create_date != null">
+				create_date=#{create_date},
+			</if>
+			<if test="update_date != null">
+				update_date=#{update_date}
+			</if>
+		</set>
+		where 1=1
+		<include refid="conds" />
+	</update>
+
+	<select id="loadActivity" resultType="com.roof.vote.activity.entity.ActivityVo">
+		select
+		<include refid="columns" />
+		from v_activity
+		where id=#{id}
+	</select>
+	
+	<select id="selectActivity" resultType="com.roof.vote.activity.entity.ActivityVo">
+		select
+		<include refid="columns" />
+		from v_activity
+		where 1=1
+		<include refid="conds" />
+	</select>
+</mapper>

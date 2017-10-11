@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.roof.vote.vote.dao">
+
+	<sql id="columns">
+		id, activity_code, vote_user_openid, vote_num, vote_date, vote_code
+	</sql>
+	<sql id="vals">
+		#{id}, #{activity_code}, #{vote_user_openid}, #{vote_num}, #{vote_date}, #{vote_code}
+	</sql>
+	<sql id="conds">
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="activity_code != null and activity_code != ''">
+			and activity_code = #{activity_code}
+		</if>
+		<if test="vote_user_openid != null and vote_user_openid != ''">
+			and vote_user_openid = #{vote_user_openid}
+		</if>
+		<if test="vote_num != null">
+			and vote_num = #{vote_num}
+		</if>
+		<if test="vote_date != null">
+			and vote_date = #{vote_date}
+		</if>
+		<if test="vote_code != null and vote_code != ''">
+			and vote_code = #{vote_code}
+		</if>
+	</sql>
+
+	<insert id="saveVote" parameterType="com.roof.vote.vote.entity.Vote" useGeneratedKeys="true" keyProperty="id">
+		<selectKey keyProperty="id" resultType="Long" order="AFTER">
+			select last_insert_id()
+		</selectKey>
+		insert into v_vote (<include refid="columns" />) 
+		values (<include refid="vals" />)
+	</insert>
+
+	<delete id="deleteVote">
+		delete from v_vote
+		where id=#{id} 
+	</delete>
+
+	<delete id="deleteByExampleVote">
+		delete from v_vote
+		where 1=1
+		<include refid="conds" />
+	</delete>
+
+	<update id="updateVote">
+		update v_vote
+		<set>
+			id=#{id}, 
+			activity_code=#{activity_code}, 
+			vote_user_openid=#{vote_user_openid}, 
+			vote_num=#{vote_num}, 
+			vote_date=#{vote_date}, 
+			vote_code=#{vote_code}
+		</set>
+		where id=#{id} 
+	</update>
+
+	<update id="updateIgnoreNullVote">
+		update v_vote
+		<set>
+		<if test="id != null">
+			id=#{id}, 
+		</if>
+		<if test="activity_code != null and activity_code != ''">
+			activity_code=#{activity_code}, 
+		</if>
+		<if test="vote_user_openid != null and vote_user_openid != ''">
+			vote_user_openid=#{vote_user_openid}, 
+		</if>
+		<if test="vote_num != null">
+			vote_num=#{vote_num}, 
+		</if>
+		<if test="vote_date != null">
+			vote_date=#{vote_date}, 
+		</if>
+		<if test="vote_code != null and vote_code != ''">
+			vote_code=#{vote_code}
+		</if>
+		</set>
+		where id=#{id} 
+	</update>
+
+	<update id="updateByExampleVote">
+		update v_vote
+		<set>
+			<if test="id != null">
+			id=#{id}, 
+			</if>
+			<if test="activity_code != null and activity_code != ''">
+			activity_code=#{activity_code}, 
+			</if>
+			<if test="vote_user_openid != null and vote_user_openid != ''">
+			vote_user_openid=#{vote_user_openid}, 
+			</if>
+			<if test="vote_num != null">
+			vote_num=#{vote_num}, 
+			</if>
+			<if test="vote_date != null">
+			vote_date=#{vote_date}, 
+			</if>
+			<if test="vote_code != null and vote_code != ''">
+			vote_code=#{vote_code}
+			</if>
+		</set>
+		where 1=1
+		<include refid="conds" />
+	</update>
+	
+	<select id="loadVote" resultType="com.roof.vote.vote.entity.VoteVo">
+		select 
+		<include refid="columns"/>
+		from v_vote
+		where id=#{id} 
+	</select>
+	
+	<select id="selectVote" resultType="com.roof.vote.vote.entity.VoteVo">
+		select 
+		<include refid="columns"/>
+		from v_vote
+		where 1=1
+		<include refid="conds" />
+	</select>
+</mapper>

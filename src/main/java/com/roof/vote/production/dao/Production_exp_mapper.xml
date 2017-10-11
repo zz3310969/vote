@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.roof.vote.production.dao">
+	<sql id="columnsAs">
+		t1.id, t1.name, t1.activity_code, t1.user_id, t1.remark,
+		t1.img_src, t1.img_src_thumb, t1.status, t1.vote_code, t1.upload_date,
+		t1.create_date, t1.update_date
+	</sql>
+
+	<select id="selectProductByuserid" resultType="com.roof.vote.production.entity.ProductionVo">
+		select
+		p.id,
+		p.name,
+		p.activity_code, p.user_id, p.remark, p.img_src,
+		p.img_src_thumb,
+		p.status, p.vote_code, p.upload_date, p.create_date,
+		p.update_date,a.name as actName,a.remark as actRemark,a.status as
+		actStatus,
+		a.vote_limit as vote_limit
+		from v_production p left join
+		v_activity a
+		on p.activity_code = a.code
+		where p.user_id=#{user_id}
+	</select>
+
+
+	<select id="selectProductionPage" resultType="com.roof.vote.production.entity.ProductionVo">
+		select
+		<include refid="columnsAs" />
+		from
+		v_production t1
+		join
+		(SELECT
+		id
+		from
+		v_production
+		where 1=1
+		<include refid="conds" />
+		order by id desc
+		limit #{firstrownum}, #{limit}) t2
+		where t1.id = t2.id
+	</select>
+
+	<select id="selectProductionCount" resultType="java.lang.Long">
+		select
+		count(id)
+		from v_production
+		where 1=1
+		<include refid="conds" />
+	</select>
+</mapper>

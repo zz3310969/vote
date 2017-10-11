@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.roof.vote.production.dao">
+
+	<sql id="columns">
+		id, name, activity_code, user_id, remark, img_src,
+		img_src_thumb, status, vote_code, upload_date, create_date,
+		update_date
+	</sql>
+	<sql id="vals">
+		#{id}, #{name}, #{activity_code}, #{user_id}, #{remark},
+		#{img_src}, #{img_src_thumb}, #{status}, #{vote_code}, #{upload_date},
+		#{create_date}, #{update_date}
+	</sql>
+	<sql id="conds">
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="name != null and name != ''">
+			and name = #{name}
+		</if>
+		<if test="activity_code != null and activity_code != ''">
+			and activity_code = #{activity_code}
+		</if>
+		<if test="user_id != null">
+			and user_id = #{user_id}
+		</if>
+		<if test="remark != null and remark != ''">
+			and remark = #{remark}
+		</if>
+		<if test="img_src != null and img_src != ''">
+			and img_src = #{img_src}
+		</if>
+		<if test="img_src_thumb != null and img_src_thumb != ''">
+			and img_src_thumb = #{img_src_thumb}
+		</if>
+		<if test="status != null and status != ''">
+			and status = #{status}
+		</if>
+		<if test="vote_code != null and vote_code != ''">
+			and vote_code = #{vote_code}
+		</if>
+		<if test="upload_date != null">
+			and upload_date = #{upload_date}
+		</if>
+		<if test="create_date != null">
+			and create_date = #{create_date}
+		</if>
+		<if test="update_date != null">
+			and update_date = #{update_date}
+		</if>
+	</sql>
+
+	<insert id="saveProduction" parameterType="com.roof.vote.production.entity.Production"
+		useGeneratedKeys="true" keyProperty="id">
+		<selectKey keyProperty="id" resultType="Long" order="AFTER">
+			select
+			last_insert_id()
+		</selectKey>
+		insert into v_production (
+		<include refid="columns" />
+		)
+		values (
+		<include refid="vals" />
+		)
+	</insert>
+
+	<delete id="deleteProduction">
+		delete from v_production
+		where id=#{id}
+	</delete>
+
+	<delete id="deleteByExampleProduction">
+		delete from v_production
+		where 1=1
+		<include refid="conds" />
+	</delete>
+
+	<update id="updateProduction">
+		update v_production
+		<set>
+			id=#{id},
+			name=#{name},
+			activity_code=#{activity_code},
+			user_id=#{user_id},
+			remark=#{remark},
+			img_src=#{img_src},
+			img_src_thumb=#{img_src_thumb},
+			status=#{status},
+			vote_code=#{vote_code},
+			upload_date=#{upload_date},
+			create_date=#{create_date},
+			update_date=#{update_date}
+		</set>
+		where id=#{id}
+	</update>
+
+	<update id="updateIgnoreNullProduction">
+		update v_production
+		<set>
+			<if test="id != null">
+				id=#{id},
+			</if>
+			<if test="name != null and name != ''">
+				name=#{name},
+			</if>
+			<if test="activity_code != null and activity_code != ''">
+				activity_code=#{activity_code},
+			</if>
+			<if test="user_id != null">
+				user_id=#{user_id},
+			</if>
+			<if test="remark != null and remark != ''">
+				remark=#{remark},
+			</if>
+			<if test="img_src != null and img_src != ''">
+				img_src=#{img_src},
+			</if>
+			<if test="img_src_thumb != null and img_src_thumb != ''">
+				img_src_thumb=#{img_src_thumb},
+			</if>
+			<if test="status != null and status != ''">
+				status=#{status},
+			</if>
+			<if test="vote_code != null and vote_code != ''">
+				vote_code=#{vote_code},
+			</if>
+			<if test="upload_date != null">
+				upload_date=#{upload_date},
+			</if>
+			<if test="create_date != null">
+				create_date=#{create_date},
+			</if>
+			<if test="update_date != null">
+				update_date=#{update_date}
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+
+	<update id="updateByExampleProduction">
+		update v_production
+		<set>
+			<if test="id != null">
+				id=#{id},
+			</if>
+			<if test="name != null and name != ''">
+				name=#{name},
+			</if>
+			<if test="activity_code != null and activity_code != ''">
+				activity_code=#{activity_code},
+			</if>
+			<if test="user_id != null">
+				user_id=#{user_id},
+			</if>
+			<if test="remark != null and remark != ''">
+				remark=#{remark},
+			</if>
+			<if test="img_src != null and img_src != ''">
+				img_src=#{img_src},
+			</if>
+			<if test="img_src_thumb != null and img_src_thumb != ''">
+				img_src_thumb=#{img_src_thumb},
+			</if>
+			<if test="status != null and status != ''">
+				status=#{status},
+			</if>
+			<if test="vote_code != null and vote_code != ''">
+				vote_code=#{vote_code},
+			</if>
+			<if test="upload_date != null">
+				upload_date=#{upload_date},
+			</if>
+			<if test="create_date != null">
+				create_date=#{create_date},
+			</if>
+			<if test="update_date != null">
+				update_date=#{update_date}
+			</if>
+		</set>
+		where 1=1
+		<include refid="conds" />
+	</update>
+
+	<select id="loadProduction" resultType="com.roof.vote.production.entity.ProductionVo">
+		select
+		p.id, p.name,
+		p.activity_code, p.user_id, p.remark, p.img_src,
+		p.img_src_thumb,
+		p.status, p.vote_code, p.upload_date, p.create_date,
+		p.update_date,a.name as actName,a.remark as actRemark,a.status as
+		actStatus,
+		a.vote_limit as vote_limit
+		from v_production p left join
+		v_activity a
+		on p.activity_code = a.code
+		where p.id=#{id}
+	</select>
+
+	<select id="selectProduction" resultType="com.roof.vote.production.entity.ProductionVo">
+		select
+		<include refid="columns" />
+		from v_production
+		where 1=1
+		<include refid="conds" />
+	</select>
+</mapper>
