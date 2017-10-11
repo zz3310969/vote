@@ -28,7 +28,7 @@ public class VoteServiceTest extends AbstractJUnit4SpringContextTests {
 
 	@Test
 	public void testVoteNum() {
-		Long l = voteService.voteNum("toupiao1", "A-20171011-000002");
+		Long l = voteService.voteNum("123456789", "A-20171011-000002");
 		System.out.println(l);
 	}
 

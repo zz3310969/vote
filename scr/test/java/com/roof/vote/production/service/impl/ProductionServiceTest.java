@@ -34,7 +34,7 @@ public class ProductionServiceTest extends AbstractJUnit4SpringContextTests {
 
 	@Test
 	public void testgetPro() {
-		ProductionVo vo = productionService.getPro(4L);
+		ProductionVo vo = productionService.getPro(3L);
 		System.out.println(JSON.toJSONString(vo));
 	}
 

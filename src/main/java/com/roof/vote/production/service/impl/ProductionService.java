@@ -3,12 +3,19 @@ package com.roof.vote.production.service.impl;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.roof.roof.dataaccess.api.Page;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.BoundZSetOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.roof.vote.activity.service.impl.ActivityService;
+import com.alibaba.fastjson.JSON;
 import com.roof.vote.common.ActivityStatusEnum;
 import com.roof.vote.common.ProductionStatusEnum;
 import com.roof.vote.production.dao.api.IProductionDao;
@@ -16,16 +23,6 @@ import com.roof.vote.production.entity.Production;
 import com.roof.vote.production.entity.ProductionVo;
 import com.roof.vote.production.service.api.IProductionService;
 import com.roof.vote.vote.entity.Vote;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.redis.core.BoundValueOperations;
-import org.springframework.data.redis.core.BoundZSetOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductionService implements IProductionService {
@@ -55,17 +52,26 @@ public class ProductionService implements IProductionService {
 
 		String key = Vote.createVoteZsetKey(pvo.getActivity_code());
 		BoundZSetOperations operations = redisTemplate.boundZSetOps(key);
-		Long index = operations.rank(Vote.createVoteZsetValueKey(pvo.getVote_code()));
+		Long index = operations.reverseRank(Vote.createVoteZsetValueKey(pvo.getVote_code()));
 		pvo.setIndex(index + 1);
+		System.out.println(index);
 		if (index.longValue() == 0) {// 第一名直接返回
 			pvo.setMarginNum(0D);
 			return pvo;
 		}
 		Set<TypedTuple<String>> zset = operations.reverseRangeByScoreWithScores(index - 1, index);
+		Set<TypedTuple<String>> zset1 = operations.reverseRangeByScoreWithScores(index, index + 1);
 		for (TypedTuple<String> typedTuple : zset) {
-			if (!typedTuple.getValue().equals(Vote.createVoteZsetValueKey(pvo.getVote_code()))) {
-				pvo.setPerNum(typedTuple.getScore());
-			}
+			System.out.println(JSON.toJSONString(typedTuple));
+			// if
+			// (!typedTuple.getValue().equals(Vote.createVoteZsetValueKey(pvo.getVote_code())))
+			// {
+			// pvo.setPerNum(typedTuple.getScore());
+			// }
+		}
+
+		for (TypedTuple<String> typedTuple : zset1) {
+			System.out.println(JSON.toJSONString(typedTuple));
 		}
 		// 票差额
 		if (pvo.getPerNum() != null) {
