@@ -36,7 +36,7 @@ public class ActivityService implements IActivityService {
 	private IActivityDao activityDao;
 
 	public final static String CODEPREFIX = "A";
-	public final static String VOTECODEPREFIX = "VO";
+	public final static String VOTECODEPREFIX = "VOTE#NUMBER";
 
 	@SuppressWarnings("rawtypes")
 	@Autowired
@@ -62,14 +62,14 @@ public class ActivityService implements IActivityService {
 
 	@SuppressWarnings("unchecked")
 	public String createVoteCode(Date date) {
-		String key = VOTECODEPREFIX + "-" + RoofDateUtils.dateToString(date, "yyyyMMdd");
+		String key = VOTECODEPREFIX;
 		BoundValueOperations<String, Long> operations = redisTemplate.boundValueOps(key);// .increment(1);
 		Long l = operations.increment(1);
-		operations.expire(2, TimeUnit.DAYS);
-		String s = "00000" + l;
-		s = s.substring(s.length() - 6, s.length());
-		String str = key + "-" + s;
-		return str;
+		// operations.expire(2, TimeUnit.DAYS);
+		// String s = "00000" + l;
+		// s = s.substring(s.length() - 6, s.length());
+		// String str = key + "-" + s;
+		return l + "";
 	}
 
 	/**
@@ -115,6 +115,7 @@ public class ActivityService implements IActivityService {
 			activityUser.setOpenid(pvo.getUser().getOpenid());
 			activityUser.setTel(pvo.getUser().getTel());
 			activityUserService.save(activityUser);
+			uservo = new ActivityUserVo();
 			uservo.setId(activityUser.getId());
 		}
 		// 新增活动，状态为待审核
@@ -153,7 +154,7 @@ public class ActivityService implements IActivityService {
 		p.setUpdate_date(new Date());
 		productionService.updateIgnoreNull(p);
 		// 更新用户信息
-		if (pvo.getUser() == null) {
+		if (pvo.getUser() != null) {
 			ProductionVo v_pvo = productionService.load(new Production(pvo.getId()));
 			ActivityUser activityUser = new ActivityUser();
 			BeanUtils.copyProperties(pvo.getUser(), activityUser);
