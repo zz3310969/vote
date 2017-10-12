@@ -2,6 +2,7 @@ package com.roof.vote.activity.service.impl;
 
 import static org.junit.Assert.fail;
 
+import java.text.ParseException;
 import java.util.Date;
 
 import org.junit.Test;
@@ -10,26 +11,46 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
+import com.alibaba.fastjson.JSON;
 import com.roof.vote.activity.entity.Activity;
 import com.roof.vote.activity.service.api.IActivityService;
+import com.roof.vote.activityuser.entity.ActivityUserVo;
 import com.roof.vote.common.ActivityStatusEnum;
+import com.roof.vote.common.ProductionStatusEnum;
+import com.roof.vote.common.VoteFileService;
+import com.roof.vote.exception.VoteException;
+import com.roof.vote.production.entity.ProductionVo;
 
 @ContextConfiguration(locations = { "classpath:spring.xml" })
 public class ActivityServiceTest extends AbstractJUnit4SpringContextTests {
 
 	@Autowired
 	private IActivityService activityService;
+	@Autowired
+	private VoteFileService voteFileService;
 
 	@Test
-	public void testCanApply() {
+	public void testCanApply() throws VoteException, ParseException {
 		Boolean b = activityService.canApply("A-20171011-000002");
 		System.out.println(b);
 	}
 
 	@Test
 	public void testApply() {
-
-//		activityService.apply(pvo);
+		for (int i = 0; i < 20; i++) {
+			ProductionVo pvo = new ProductionVo();
+			pvo.setActivity_code("A-20171011-000002");
+			pvo.setImg_src("xxxxxxx");
+			pvo.setName("郑量天来比赛" + i);
+			pvo.setRemark("我是天天" + i);
+			ActivityUserVo u = new ActivityUserVo();
+			u.setActivity_code("A-20171011-000002");
+			u.setName("整了两天1" + i);
+			u.setOpenid("aaaa" + i);
+			u.setTel("1332533321");
+			pvo.setUser(u);
+			activityService.apply(pvo);
+		}
 	}
 
 	@Test
@@ -39,12 +60,24 @@ public class ActivityServiceTest extends AbstractJUnit4SpringContextTests {
 
 	@Test
 	public void testUpdateApply() {
-		fail("Not yet implemented");
+		ProductionVo pvo = new ProductionVo();
+		pvo.setId(2L);
+		pvo.setStatus(ProductionStatusEnum.processed.getCode());
+		ActivityUserVo u = new ActivityUserVo();
+		u.setActivity_code("A-20171011-000002");
+		u.setName("1111");
+		u.setOpenid("ddsdfdsfdsfsdfsdfsdfsdfsd111111");
+		u.setTel("1111");
+		pvo.setUser(u);
+		activityService.updateApply(pvo);
 	}
 
 	@Test
 	public void testPageQueryApply() {
-		fail("Not yet implemented");
+		ActivityUserVo uvo = new ActivityUserVo();
+		uvo.setOpenid("ddsdfdsfdsfsdfsdfsdfsdfsd111111");
+		ActivityUserVo vo = activityService.pageQueryApply(uvo);
+		System.out.println(JSON.toJSONString(vo));
 	}
 
 	@Test

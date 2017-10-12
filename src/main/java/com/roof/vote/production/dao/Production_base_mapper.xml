@@ -191,10 +191,12 @@
 		p.status, p.vote_code, p.upload_date, p.create_date,
 		p.update_date,a.name as actName,a.remark as actRemark,a.status as
 		actStatus,
-		a.vote_limit as vote_limit
+		a.vote_limit as vote_limit , au.name as username
 		from v_production p left join
-		v_activity a
+		v_activity a 
 		on p.activity_code = a.code
+		left join v_activity_user au
+		on p.user_id = au.id
 		where p.id=#{id}
 	</select>
 

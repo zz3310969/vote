@@ -12,13 +12,13 @@ import com.roof.vote.vote.entity.VoteVo;
 
 public interface IVoteService {
 	/** 是否可以投票 */
-	public String canVote(String openid) throws VoteException;
+	public Boolean canVote(String openid, String acode) throws VoteException;
 
 	/** 可投票数 */
 	public Long voteNum(String openid, String acode) throws VoteException;
 
 	/** 投票 */
-	public void vote(List<VoteVo> votes) throws VoteException;
+	public void vote(VoteVo vote) throws VoteException;
 
 	/** 投票统计 */
 	public void voteReport(String acode) throws VoteException;

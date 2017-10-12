@@ -27,6 +27,16 @@ public class ProductionVo extends Production {
 
 	private Long vote_limit;
 
+	private String username;// 参赛用户名
+
+	private Double num;// 当前票数
+
+	private Long index;// 当前排名
+
+	private Double perNum;// 上一个票数
+
+	private Double marginNum;// 票差
+
 	public ProductionVo() {
 		super();
 	}
@@ -98,6 +108,46 @@ public class ProductionVo extends Production {
 
 	public void setVote_limit(Long vote_limit) {
 		this.vote_limit = vote_limit;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public Double getNum() {
+		return num;
+	}
+
+	public void setNum(Double num) {
+		this.num = num;
+	}
+
+	public Long getIndex() {
+		return index;
+	}
+
+	public void setIndex(Long index) {
+		this.index = index;
+	}
+
+	public Double getPerNum() {
+		return perNum;
+	}
+
+	public void setPerNum(Double perNum) {
+		this.perNum = perNum;
+	}
+
+	public Double getMarginNum() {
+		return marginNum;
+	}
+
+	public void setMarginNum(Double marginNum) {
+		this.marginNum = marginNum;
 	}
 
 }

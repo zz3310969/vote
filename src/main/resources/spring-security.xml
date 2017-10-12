@@ -10,7 +10,11 @@
 	<!-- <http pattern="/**/*" security="none" /> -->
 	<http pattern="/selin/fileAction/getFile.action*" security="none" />
 	<http pattern="/selin/fileAction/uploadFile.action*" security="none" />
-
+	
+	<http pattern="/vote/wechat/voteWechatAction/**" security="none" />
+	<http pattern="/vote/wechat/applyWechatAction/**" security="none" />
+	<http pattern="/vote/wechat/fileAction/**" security="none" />
+	
 	<http pattern="/selin/user/**" security="none" />
 	<http pattern="/selin/weChatAction/**" security="none" />
 	<http pattern="/mainAction/login.action*" security="none" />

@@ -36,7 +36,18 @@ public class ActivityService implements IActivityService {
 	private IActivityDao activityDao;
 
 	public final static String CODEPREFIX = "A";
-	public final static String VOTECODEPREFIX = "VO";
+	/**
+	 * 当前活动对应的作品序号
+	 */
+	public final static String VOTECODEPREFIX = "VN#";
+	/**
+	 * 当前活动对应作品票数
+	 */
+	public final static String VOTEPRODUCTIONPREFIX = "VP#";
+	/**
+	 * 当前活动对应的票数排名
+	 */
+	public final static String VOTEZSET = "VZSET#";
 
 	@SuppressWarnings("rawtypes")
 	@Autowired
@@ -61,32 +72,32 @@ public class ActivityService implements IActivityService {
 	}
 
 	@SuppressWarnings("unchecked")
-	public String createVoteCode(Date date) {
-		String key = VOTECODEPREFIX + "-" + RoofDateUtils.dateToString(date, "yyyyMMdd");
+	public String createVoteCode(Date date, String acode) {
+		String key = VOTECODEPREFIX + acode;
 		BoundValueOperations<String, Long> operations = redisTemplate.boundValueOps(key);// .increment(1);
 		Long l = operations.increment(1);
-		operations.expire(2, TimeUnit.DAYS);
-		String s = "00000" + l;
-		s = s.substring(s.length() - 6, s.length());
-		String str = key + "-" + s;
-		return str;
+		// operations.expire(2, TimeUnit.DAYS);
+		// String s = "00000" + l;
+		// s = s.substring(s.length() - 6, s.length());
+		// String str = key + "-" + s;
+		return l + "";
 	}
 
-	/** 是否可以报名 */
-	public Boolean canApply(String code) throws VoteException {
-		try {
-			ActivityVo av = this.selelctActivityByCode(code);
-			Date d = RoofDateUtils.getNowDate();
-			if (!av.getStatus().equals(ActivityStatusEnum.inProgress.getCode())) {
-				return false;
-			}
-			if (d.getTime() <= av.getApply_end_time().getTime() && d.getTime() >= av.getApply_start_time().getTime()) {
-				return true;
-			}
+	/**
+	 * 是否可以报名
+	 * 
+	 * @throws ParseException
+	 */
+	public Boolean canApply(String code) throws VoteException, ParseException {
+		ActivityVo av = this.selelctActivityByCode(code);
+		Date d = RoofDateUtils.getNowDate();
+		if (!av.getStatus().equals(ActivityStatusEnum.inProgress.getCode())) {
 			return false;
-		} catch (ParseException e) {
-			throw new VoteException("时间转换异常");
 		}
+		if (d.getTime() <= av.getApply_end_time().getTime() && d.getTime() >= av.getApply_start_time().getTime()) {
+			return true;
+		}
+		return false;
 
 	}
 
@@ -115,6 +126,7 @@ public class ActivityService implements IActivityService {
 			activityUser.setOpenid(pvo.getUser().getOpenid());
 			activityUser.setTel(pvo.getUser().getTel());
 			activityUserService.save(activityUser);
+			uservo = new ActivityUserVo();
 			uservo.setId(activityUser.getId());
 		}
 		// 新增活动，状态为待审核
@@ -124,7 +136,7 @@ public class ActivityService implements IActivityService {
 		p.setStatus(ProductionStatusEnum.waitProcess.getCode());
 		p.setUpload_date(new Date());
 		p.setUser_id(uservo.getId());
-		p.setVote_code(this.createVoteCode(new Date()));
+		p.setVote_code(this.createVoteCode(new Date(), pvo.getActivity_code()));
 		productionService.save(p);
 		return p;
 	}
@@ -153,7 +165,7 @@ public class ActivityService implements IActivityService {
 		p.setUpdate_date(new Date());
 		productionService.updateIgnoreNull(p);
 		// 更新用户信息
-		if (pvo.getUser() == null) {
+		if (pvo.getUser() != null) {
 			ProductionVo v_pvo = productionService.load(new Production(pvo.getId()));
 			ActivityUser activityUser = new ActivityUser();
 			BeanUtils.copyProperties(pvo.getUser(), activityUser);
