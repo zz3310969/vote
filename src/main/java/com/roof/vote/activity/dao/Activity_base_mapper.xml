@@ -18,7 +18,7 @@
 			and id = #{id}
 		</if>
 		<if test="name != null and name != ''">
-			and name = #{name}
+			and name like  CONCAT('%', #{name},'%')
 		</if>
 		<if test="code != null and code != ''">
 			and code = #{code}
