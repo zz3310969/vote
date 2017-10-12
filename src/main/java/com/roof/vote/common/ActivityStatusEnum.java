@@ -1,5 +1,10 @@
 package com.roof.vote.common;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public enum ActivityStatusEnum {
 	newact("newact", "新建活动"), inProgress("inProgress", "进行中"), end("end", "结束"), del("del", "删除");
 
@@ -40,4 +45,17 @@ public enum ActivityStatusEnum {
 		}
 		return "";
 	}
+
+	public static List<Map<String, String>> getAll() {
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		ActivityStatusEnum[] statusEnums = ActivityStatusEnum.values();
+		for (ActivityStatusEnum senum : statusEnums) {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("code", senum.getCode());
+			map.put("name", senum.getName());
+			list.add(map);
+		}
+		return list;
+	}
+
 }
