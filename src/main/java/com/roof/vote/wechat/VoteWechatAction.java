@@ -1,6 +1,8 @@
 package com.roof.vote.wechat;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -44,6 +46,21 @@ public class VoteWechatAction {
 		try {
 			ProductionVo vo = productionService.getPro(id);
 			return new Result(Result.SUCCESS, vo);
+		} catch (Exception e) {
+			return new Result(Result.FAIL, e.getMessage());
+		}
+	}
+
+	@RequestMapping("/getProAndVoteNum")
+	public @ResponseBody Result getProAndVoteNum(Long id, String openid, String acode, HttpServletRequest request,
+			Model model) {
+		try {
+			Map<String, Object> map = new HashMap<String, Object>();
+			ProductionVo vo = productionService.getPro(id);
+			Long b = voteService.voteNum(openid, acode);
+			map.put("provo", vo);
+			map.put("voteNum", b);
+			return new Result(Result.SUCCESS, map);
 		} catch (Exception e) {
 			return new Result(Result.FAIL, e.getMessage());
 		}
