@@ -5,6 +5,8 @@ import java.util.Date;
 import java.io.Serializable;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * @author 模版生成 <br/>
  *         表名： v_production <br/>
@@ -22,10 +24,13 @@ public class Production implements Serializable {
 	protected String status;// 作品状态
 	protected String vote_code;// 投票编号
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	protected Date upload_date;// 上传日期
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	protected Date create_date;// create_date
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	protected Date update_date;// update_date
 
 	public Production() {

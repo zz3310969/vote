@@ -11,6 +11,8 @@ public class ActivityVo extends Activity {
 
 	private List<ActivityVo> activityList;
 
+	private String statusname;
+
 	public ActivityVo() {
 		super();
 	}
@@ -26,6 +28,14 @@ public class ActivityVo extends Activity {
 
 	public void setActivityList(List<ActivityVo> activityList) {
 		this.activityList = activityList;
+	}
+
+	public String getStatusname() {
+		return statusname;
+	}
+
+	public void setStatusname(String statusname) {
+		this.statusname = statusname;
 	}
 
 }

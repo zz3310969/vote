@@ -5,6 +5,8 @@ import java.util.Date;
 import java.io.Serializable;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * @author 模版生成 <br/>
  *         表名： v_activity <br/>
@@ -17,19 +19,25 @@ public class Activity implements Serializable {
 	protected String code;// 活动编号
 	protected String remark;// 活动描述
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	protected Date apply_start_time;// 报名开始时间
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	protected Date apply_end_time;// 报名结束时间
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	protected Date vote_start_time;// 投票开始时间
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	protected Date vote_end_time;// 投票结束时间
 	protected String status;// 活动状态
 	protected String vote_rule;// 投票规则
 	protected Long vote_limit;// 每人每天可投票数
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	protected Date create_date;// 创建时间
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	protected Date update_date;// 更新时间
 
 	public Activity() {

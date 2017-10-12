@@ -5,6 +5,7 @@ import java.util.Date;
 import java.io.Serializable;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.roof.vote.activity.service.impl.ActivityService;
 
 /**
@@ -19,6 +20,7 @@ public class Vote implements Serializable {
 	protected String vote_user_openid;// 投票人openid
 	protected Long vote_num;// 投票数
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	protected Date vote_date;// 投票日期
 	protected String vote_code;// 投票编号
 

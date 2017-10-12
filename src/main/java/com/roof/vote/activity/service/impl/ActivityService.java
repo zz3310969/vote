@@ -228,7 +228,13 @@ public class ActivityService implements IActivityService {
 	}
 
 	public Page page(Page page, Activity activity) {
-		return activityDao.page(page, activity);
+		activityDao.page(page, activity);
+		List<ActivityVo> list = (List<ActivityVo>) page.getDataList();
+		for (ActivityVo activityVo : list) {
+			activityVo.setStatusname(ActivityStatusEnum.getStatusEnumName(activityVo.getStatus()));
+		}
+		page.setDataList(list);
+		return page;
 	}
 
 	@Autowired

@@ -9,12 +9,13 @@
 
 	<select id="selectvoteNum" resultType="java.lang.Long">
 		select
-		count(1)
+		sum(vote_num)
 		from v_vote
 		where 1=1
 		and activity_code = #{activity_code}
 		and vote_user_openid = #{vote_user_openid}
 		and date_format(vote_date,'%Y-%m-%d') between curdate() and date_sub(curdate(),interval -1 day)
+		group by vote_user_openid,activity_code
 	</select>
 
 	<select id="selectVotePage" resultType="com.roof.vote.vote.entity.VoteVo">
