@@ -241,6 +241,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>vote</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
