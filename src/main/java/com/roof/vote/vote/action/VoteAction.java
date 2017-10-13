@@ -3,23 +3,24 @@ package com.roof.vote.vote.action;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+
 import org.roof.roof.dataaccess.api.Page;
 import org.roof.roof.dataaccess.api.PageUtils;
 import org.roof.spring.Result;
 import org.roof.web.dictionary.entity.Dictionary;
 import org.roof.web.dictionary.service.api.IDictionaryService;
-
-import com.roof.vote.production.entity.ProductionVo;
-import com.roof.vote.production.service.api.IProductionService;
-import com.roof.vote.vote.entity.Vote;
-import com.roof.vote.vote.entity.VoteVo;
-import com.roof.vote.vote.service.api.IVoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.roof.vote.production.entity.ProductionVo;
+import com.roof.vote.production.service.api.IProductionService;
+import com.roof.vote.vote.entity.Vote;
+import com.roof.vote.vote.entity.VoteVo;
+import com.roof.vote.vote.service.api.IVoteService;
 
 @Controller
 @RequestMapping("vote/voteAction")

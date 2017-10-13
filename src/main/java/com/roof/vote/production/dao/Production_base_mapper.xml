@@ -191,7 +191,7 @@
 		p.status, p.vote_code, p.upload_date, p.create_date,
 		p.update_date,a.name as actName,a.remark as actRemark,a.status as
 		actStatus,
-		a.vote_limit as vote_limit , au.name as username
+		a.vote_limit as vote_limit , au.name as username,au.openid as useropenid
 		from v_production p left join
 		v_activity a 
 		on p.activity_code = a.code

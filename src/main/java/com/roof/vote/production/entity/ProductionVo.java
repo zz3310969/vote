@@ -30,6 +30,8 @@ public class ProductionVo extends Production {
 	private String username;// 参赛用户名
 
 	private String usertel;// 参赛用户号码
+	
+	private String useropenid;
 
 	private Double num;// 当前票数
 
@@ -158,6 +160,14 @@ public class ProductionVo extends Production {
 
 	public void setUsertel(String usertel) {
 		this.usertel = usertel;
+	}
+
+	public String getUseropenid() {
+		return useropenid;
+	}
+
+	public void setUseropenid(String useropenid) {
+		this.useropenid = useropenid;
 	}
 
 }

@@ -71,6 +71,7 @@ public class VoteWechatAction {
 	public @ResponseBody Result pagePros(Production product, HttpServletRequest request, Model model) {
 		try {
 			Page page = PageUtils.createPage(request);
+			page.setLimit(10000L);
 			if (product == null) {
 				product = new Production();
 			}

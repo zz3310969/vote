@@ -115,7 +115,8 @@
 		,
 		t3.name as username,
 		t3.tel as usertel,
-		(SELECT  name from v_activity WHERE code = t1.activity_code ) as actName
+		(SELECT  name from v_activity WHERE code = t1.activity_code ) as actName,
+		t3.openid as useropenid
 		from
 		v_production t1
 		left join
