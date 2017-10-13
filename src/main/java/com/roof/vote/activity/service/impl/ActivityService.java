@@ -182,6 +182,9 @@ public class ActivityService implements IActivityService {
 		}
 		ActivityUserVo uservo = activityUserService.loadByOpenid(uvo.getOpenid());
 		List<ProductionVo> pvos = productionService.selectProductByuserid(uservo.getId());
+		for (ProductionVo productionVo : pvos) {
+			productionVo.setProStatusName(ProductionStatusEnum.getStatusEnumName(productionVo.getStatus()));
+		}
 		uservo.setProducts(pvos);
 		return uservo;
 	}
