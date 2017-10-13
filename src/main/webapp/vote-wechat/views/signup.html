@@ -352,12 +352,16 @@
           },
           on: {
               complete:function(resp){
-                var picId = resp.json.data;
-                // var picId = 1;
-                $("#portrait").attr('src',basePath+"/api/vote/wechat/fileAction/getFile.action?filename="+picId);
-                $("#portrait").data('img-src',picId)
-                ajaxpar['firstimg'] = false;
-                $("#view1").hide();
+                if(resp.state=="success"){
+                  var picId = resp.json.data;
+                  // var picId = 1;
+                  $("#portrait").attr('src',basePath+"/api/vote/wechat/fileAction/getFile.action?filename="+picId);
+                  $("#portrait").data('img-src',picId)
+                  ajaxpar['firstimg'] = false;
+                  $("#view1").hide();
+                }else{
+                  alert(resp.message);
+                }
               }
           }
       });
