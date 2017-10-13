@@ -136,13 +136,19 @@ public class ProductionService implements IProductionService {
 				perindex = i - 1;
 			}
 		}
-		if (perindex < 0) {
+		if(pvo.getIndex()!=null){
+			if (perindex < 0) {
+				pvo.setMarginNum(0D);
+				pvo.setPerNum(0D);
+			} else {
+				ProductionVo per = pros.get(perindex);
+				pvo.setPerNum(per.getNum());
+				pvo.setMarginNum(new BigDecimal(per.getNum()).subtract(new BigDecimal(pvo.getNum())).doubleValue());
+			}
+		}else{
+			pvo.setIndex(0L);;
 			pvo.setMarginNum(0D);
 			pvo.setPerNum(0D);
-		} else {
-			ProductionVo per = pros.get(perindex);
-			pvo.setPerNum(per.getNum());
-			pvo.setMarginNum(new BigDecimal(per.getNum()).subtract(new BigDecimal(pvo.getNum())).doubleValue());
 		}
 		// String key = Vote.createVoteZsetKey(pvo.getActivity_code());
 		// BoundZSetOperations operations = redisTemplate.boundZSetOps(key);
