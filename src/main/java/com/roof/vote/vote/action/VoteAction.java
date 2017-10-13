@@ -8,6 +8,9 @@ import org.roof.roof.dataaccess.api.PageUtils;
 import org.roof.spring.Result;
 import org.roof.web.dictionary.entity.Dictionary;
 import org.roof.web.dictionary.service.api.IDictionaryService;
+
+import com.roof.vote.production.entity.ProductionVo;
+import com.roof.vote.production.service.api.IProductionService;
 import com.roof.vote.vote.entity.Vote;
 import com.roof.vote.vote.entity.VoteVo;
 import com.roof.vote.vote.service.api.IVoteService;
@@ -24,9 +27,12 @@ public class VoteAction {
 	private IVoteService voteService;
 	private IDictionaryService dictionaryService;
 
+	@Autowired
+	private IProductionService productionService;
+
 	// 加载页面的通用数据
-	private void loadCommon(Model model){
-		List<Dictionary> dicList =  dictionaryService.findByType("TEST");
+	private void loadCommon(Model model) {
+		List<Dictionary> dicList = dictionaryService.findByType("TEST");
 		model.addAttribute("dicList", dicList);
 	}
 
@@ -36,25 +42,29 @@ public class VoteAction {
 	}
 
 	/*
+	 * @RequestMapping("/list") public String list(Vote vote, HttpServletRequest
+	 * request, Model model) { Page page = PageUtils.createPage(request); page =
+	 * voteService.page(page, vote); model.addAttribute("page", page);
+	 * model.addAllAttributes(PageUtils.createPagePar(page));
+	 * this.loadCommon(model); return "/selin/vote/vote_list.jsp"; }
+	 */
+
 	@RequestMapping("/list")
-	public String list(Vote vote, HttpServletRequest request, Model model) {
+	public @ResponseBody Result list(VoteVo vote, HttpServletRequest request, Model model) {
 		Page page = PageUtils.createPage(request);
 		page = voteService.page(page, vote);
-		model.addAttribute("page", page);
-		model.addAllAttributes(PageUtils.createPagePar(page));
-		this.loadCommon(model);
-		return "/selin/vote/vote_list.jsp";
+		return new Result(Result.SUCCESS, page);
 	}
-	*/
 
-    @RequestMapping("/list")
-    public @ResponseBody Result list(Vote vote, HttpServletRequest request, Model model) {
-    Page page = PageUtils.createPage(request);
-    page = voteService.page(page, vote);
-    return new Result(Result.SUCCESS,page);
+	@RequestMapping("/reportByoneAct")
+	public @ResponseBody Result reportByoneAct(VoteVo vote, String acode, HttpServletRequest request, Model model) {
+		if (acode == null) {
+			acode = "A-20171011-000002";
+		}
+		List<ProductionVo> pros = productionService.selectPros(acode);
+		return new Result(Result.SUCCESS, pros);
 	}
-	
-	
+
 	@RequestMapping("/create_page")
 	public String create_page(Model model) {
 		Vote vote = new Vote();
@@ -62,7 +72,7 @@ public class VoteAction {
 		this.loadCommon(model);
 		return "/selin/vote/vote_create.jsp";
 	}
-	
+
 	@RequestMapping("/update_page")
 	public String update_page(Vote vote, Model model) {
 		vote = voteService.load(vote);
@@ -88,7 +98,7 @@ public class VoteAction {
 			return new Result("数据传输失败!");
 		}
 	}
-	
+
 	@RequestMapping("/update")
 	public @ResponseBody Result update(Vote vote) {
 		if (vote != null) {
@@ -98,7 +108,7 @@ public class VoteAction {
 			return new Result("数据传输失败!");
 		}
 	}
-	
+
 	@RequestMapping("/delete")
 	public @ResponseBody Result delete(Vote vote) {
 		// TODO 有些关键数据是不能物理删除的，需要改为逻辑删除
@@ -107,8 +117,7 @@ public class VoteAction {
 	}
 
 	@Autowired(required = true)
-	public void setVoteService(
-			@Qualifier("voteService") IVoteService voteService) {
+	public void setVoteService(@Qualifier("voteService") IVoteService voteService) {
 		this.voteService = voteService;
 	}
 

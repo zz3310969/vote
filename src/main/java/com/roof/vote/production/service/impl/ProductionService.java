@@ -85,6 +85,13 @@ public class ProductionService implements IProductionService {
 		String key = Vote.createVoteZsetKey(pvo.getActivity_code());
 		BoundZSetOperations operations = redisTemplate.boundZSetOps(key);
 		Long index = operations.reverseRank(Vote.createVoteZsetValueKey(pvo.getVote_code()));
+		if (index == null) {// 作品未审核
+			pvo.setIndex(0L);
+			pvo.setPerNum(0D);
+			pvo.setMarginNum(0D);
+			pvo.setNum(0D);
+			return pvo;
+		}
 		pvo.setIndex(index + 1);
 		// System.out.println(Vote.createVoteZsetValueKey(pvo.getVote_code()) +
 		// "目前排名:" + index);
