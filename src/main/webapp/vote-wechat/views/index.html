@@ -85,6 +85,9 @@
 <script type="text/javascript">
   var basePath = "http://hcxz.k95.cn";
   var parameter = getUrlParameter();window.parameter=parameter;
+  if(!parameter["actId"]){
+    parameter["actId"] = 'A-20171011-000002';
+  }
   var fenxiang=new Object();window.fenxiang=fenxiang;
     fenxiang['title'] = '最美皇城小城，万元大奖等你来！！';
     fenxiang['desc'] = '活动时间：11月8日至11月23日';
@@ -103,8 +106,8 @@
       $('.js_ruletip').fadeOut();
       return false;
     });
-    parameter["openId"] = getCookie("wxopenid");
-    if(parameter["code"]&&!parameter["openId"]){
+    
+    if(parameter["code"]){
       $.ajax({
         type: "GET",
         url:basePath+'/api/wechat/base.action',
@@ -118,6 +121,7 @@
           if(resuleData.state=="success"){
             parameter["openId"] = resuleData.data;
             setCookie("wxopenid",parameter["openId"]);
+
             //投票和我的作品 链接串openId
             $(".js_signup").attr('href',$(".js_signup").attr('href')+"?openId="+parameter["openId"]+"&actId="+parameter["actId"]);
             $(".js_list").attr('href',$(".js_list").attr('href')+"?openId="+parameter["openId"]+"&actId="+parameter["actId"]);
@@ -127,10 +131,10 @@
         }   
       });
     }else{
-      //授权转发
-      var fromurl= "http://wx.teemax.com.cn/weixin/wap/lzy/hcxz_cysjds.html"; 
-      var url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8a24fb8d9f60dbbd&redirect_uri="+encodeURIComponent(fromurl)+"&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect" 
-      location.href=url;  
+        //授权转发
+        var fromurl= "http://wx.teemax.com.cn/weixin/wap/lzy/hcxz_cysjds.html"; 
+        var url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8a24fb8d9f60dbbd&redirect_uri="+encodeURIComponent(fromurl)+"&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect" 
+        location.href=url;  
     }
   });
   function urlData(){
