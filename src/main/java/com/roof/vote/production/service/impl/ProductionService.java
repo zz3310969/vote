@@ -56,6 +56,10 @@ public class ProductionService implements IProductionService {
 		return ps;
 	}
 
+	public Page page_(Page page, Production production) {
+		return productionDao.page(page, production);
+	}
+
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void processPro(Long id, Boolean processval) {
 		Production p = new Production(id);

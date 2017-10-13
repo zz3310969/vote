@@ -65,5 +65,5 @@ public interface IProductionService {
 	 * 按对象中的非空属性作为条件，进行分页查询
 	 */
 	public abstract Page page(Page page, Production production);
-
+	public Page page_(Page page, Production production);
 }

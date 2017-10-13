@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * Created by zhenglt on 2017/10/12.
@@ -44,5 +45,15 @@ public class WechatAction {
         }
         WxUserInfo userInfo = weChatHander.getUserInfo(openid);
         return new Result(Result.SUCCESS,"",userInfo.getHeadimgurl());
+    }
+
+    @RequestMapping(value = "/sign",method = {RequestMethod.GET})
+    public @ResponseBody
+    Result getSign(String url, HttpServletRequest request, Model model) throws IOException {
+        if(StringUtils.isEmpty(url)){
+            return new Result(Result.ERROR,"url不能为空");
+        }
+        Map<String,String> map = weChatHander.getSign(url);
+        return new Result(Result.SUCCESS,"",map);
     }
 }

@@ -55,7 +55,7 @@ public class ProductionAction {
     @RequestMapping("/list")
     public @ResponseBody Result list(Production production, HttpServletRequest request, Model model) {
     Page page = PageUtils.createPage(request);
-    page = productionService.page(page, production);
+    page = productionService.page_(page, production);
     return new Result(Result.SUCCESS,page);
 	}
 

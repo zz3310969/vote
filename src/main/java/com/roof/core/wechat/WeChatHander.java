@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import com.roof.core.http.HttpClientUtil;
 import com.roof.core.wechat.bean.WeChatToken;
+import com.roof.core.wechat.bean.WeJsapiTicket;
 import com.roof.core.wechat.bean.WxUserInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.roof.commons.PropertiesUtil;
@@ -37,8 +38,11 @@ public class WeChatHander {
     private String html_token_url =PropertiesUtil.getPorpertyString("selin.wx.html_access_token_url");
     private String grant_type = PropertiesUtil.getPorpertyString("selin.wx.grant_type");
     private String user_info_url = PropertiesUtil.getPorpertyString("wx.user.info.url");
+    private String jsapi_ticket_url =PropertiesUtil.getPorpertyString("wx.jsapi.ticket.url");
 
     private String redis_key = "wechat:token";
+    private String redis_jsapi_key = "wechat:jsapi_ticket";
+
 
     public String getAccess_tokenByHttp(){
        String s = HttpClientUtil.get(token_url);
@@ -101,6 +105,30 @@ public class WeChatHander {
         WxUserInfo userInfo = JSON.parseObject(s,WxUserInfo.class);
         return userInfo;
     }
+
+    public String getJsapi_ticket() throws IOException {
+        String url = jsapi_ticket_url;
+        url = url.replace("ACCESS_TOKEN",getAccess_token());
+        String s = HttpClientUtil.get(url);
+        WeJsapiTicket token = JSON.parseObject(s,WeJsapiTicket.class);
+        if(token == null){
+            LOGGER.error("获取微信Jsapi_ticket失败");
+        }else {
+            BoundValueOperations redis = redisTemplate.boundValueOps(redis_jsapi_key);
+            redis.set(token.getTicket());
+            redis.expire(token.getExpires_in(), TimeUnit.SECONDS);
+        }
+        return token.getTicket();
+    }
+
+    public Map<String, String> getSign(String url) throws IOException {
+        Map<String, String> map = Sign.sign(getJsapi_ticket(),url);
+        map.put("appId",appid);
+        return map;
+    }
+
+
+
 
 
 
