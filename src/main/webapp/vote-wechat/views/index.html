@@ -36,9 +36,9 @@
         </div>
         <ul class="index">
           <li><a class="js_signup" 
-            href="/views/signup.html"><img src="/images/index_btn1.png"/></a></li>
+            href="javascript:void(0);"><img src="/images/index_btn1.png"/></a></li>
           <li><a class="js_list" 
-              href="/views/list.html"><img src="/images/index_btn2.png"/></a></li>
+              href="javascript:void(0);"><img src="/images/index_btn2.png"/></a></li>
           <li><a class="js_rule"><img src="/images/index_btn3.png"/></a></li>
         </ul>
         
@@ -140,11 +140,11 @@
                     </tr>
                   </tbody>
                 </table>
-
-
+                <div style="font-size: 14px;margin-top: 10px;text-align: center;">
+                  <a href="http://hcxz.k95.cn/views/follow.html">点击关注我们</a></div>
             </div>
         </div>
-        </div>
+      </div>
     </div>
 <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script type="text/javascript" src="http://cdn.minsuyun.com/weixin/wap/js/jquery-2.1.0.min.js"></script>
@@ -160,13 +160,14 @@
   }
   var fenxiang=new Object();window.fenxiang=fenxiang;
     fenxiang['title'] = '最美皇城小城，万元大奖等你来！！';
-    fenxiang['desc'] = '活动时间：11月8日至11月23日';
-    fenxiang['link'] = 'http://mp.weixin.qq.com/s?__biz=MzI0MTYwMzA0Ng==&mid=2247483655&idx=1&sn=da16eaf5a3e8f9b919eee01b312ee365&chksm=e908598ede7fd09875b4bb3eacfead919b2d7492033de73ff7169927673eaeb01035cabafe13&mpshare=1&scene=1&srcid=1109kxQhsZiHj846t2lOgTBx#rd';
-    fenxiang['imgUrl'] = 'http://cdn.minsuyun.com/weixin/wap/v/7/images/banner.jpg';
+    fenxiang['desc'] = '活动时间：10月14日至11月15日';
+    // fenxiang['link'] = 'http://mp.weixin.qq.com/s?__biz=MzI0MTYwMzA0Ng==&mid=2247483655&idx=1&sn=da16eaf5a3e8f9b919eee01b312ee365&chksm=e908598ede7fd09875b4bb3eacfead919b2d7492033de73ff7169927673eaeb01035cabafe13&mpshare=1&scene=1&srcid=1109kxQhsZiHj846t2lOgTBx#rd';
+    fenxiang['link'] = 'http://hcxz.k95.cn';
+    fenxiang['imgUrl'] = 'http://hcxz.k95.cn/images/logo.jpg';
 
 
   $(document).ready(function(e) {
-    // urlData();
+    urlData();
     //规则提示
     $('.js_rule').click(function(){
       $('.js_ruletip').fadeIn();
@@ -177,6 +178,11 @@
       return false;
     });
     
+    parameter["openId"] = getCookie("wxopenid");
+
+    $(".js_signup").attr('href',"/views/signup.html?openId="+parameter["openId"]+"&actId="+parameter["actId"]);
+    $(".js_list").attr('href',"/views/list.html?openId="+parameter["openId"]+"&actId="+parameter["actId"]);
+
     if(parameter["code"]){
       $.ajax({
         type: "GET",
@@ -193,8 +199,8 @@
             setCookie("wxopenid",parameter["openId"]);
 
             //投票和我的作品 链接串openId
-            $(".js_signup").attr('href',$(".js_signup").attr('href')+"?openId="+parameter["openId"]+"&actId="+parameter["actId"]);
-            $(".js_list").attr('href',$(".js_list").attr('href')+"?openId="+parameter["openId"]+"&actId="+parameter["actId"]);
+            $(".js_signup").attr('href',"/views/signup.html?openId="+parameter["openId"]+"&actId="+parameter["actId"]);
+            $(".js_list").attr('href',"/views/list.html?openId="+parameter["openId"]+"&actId="+parameter["actId"]);
           }
         } ,
         error:function(){
@@ -204,28 +210,30 @@
         //授权转发
         var fromurl= "http://wx.teemax.com.cn/weixin/wap/lzy/hcxz_cysjds.html"; 
         var url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8a24fb8d9f60dbbd&redirect_uri="+encodeURIComponent(fromurl)+"&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect" 
-        location.href=url;  
+        location.href = url;  
     }
   });
-  function urlData(){
+
+
+    function urlData(){
       var Yurl=window.location.href;
       var datapost=new Object();
-        datapost['proId'] = parameter['paId'];
+        // datapost['proId'] = parameter['paId'];
         datapost['url'] = Yurl;
       $.ajax({
-        type: "POST",
-        url:'http://wx.teemax.com.cn/weixin/app/wei_xin_lottery_code!getJsapiTicket.action', 
+        type: "GET",
+        url:basePath + '/api/wechat/sign.action', 
         data: datapost,  
-        dataType: "jsonp",  
         beforeSend: function(){
             
         },
-        success: function(resuleData) {
+        success: function(resp) {
+          var resuleData = resp.data;
           wx.config({
             debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
             appId: resuleData.appId, // 必填，公众号的唯一标识
             timestamp:resuleData.timestamp , // 必填，生成签名的时间戳
-            nonceStr: resuleData.noncestr, // 必填，生成签名的随机串
+            nonceStr: resuleData.nonceStr, // 必填，生成签名的随机串
             signature: resuleData.signature,// 必填，签名，见附录1
             jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo','onMenuShareQZone'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
           });
@@ -235,35 +243,37 @@
           //alert('请求出错处理');
         }
       });
-  }
+    }
 
   wx.ready(function () {
     //分享到朋友圈
     wx.onMenuShareTimeline({
-      title: fenxiang['title'],
-      desc: fenxiang['desc'],
-      link: fenxiang['link'],
-      imgUrl: fenxiang['imgUrl'],
+      title: '最美皇城小城，万元大奖等你来！！',
+      desc: '活动时间：10月14日至11月15日',
+      link: 'http://hcxz.k95.cn',
+      imgUrl: 'http://hcxz.k95.cn/images/logo.jpg',
       success: function () { 
         //分享到朋友圈成功，开启活动
-        //alert('已分享到朋友圈');
+        // alert('已分享到朋友圈');
         beginGame();
       },
       cancel: function () { 
-        //alert('已取消分享');
+        // alert('已取消分享');
       }
     });
     //发送给朋友
     wx.onMenuShareAppMessage({
-      title: fenxiang['title'],
-      desc: fenxiang['desc'],
-      link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8a24fb8d9f60dbbd&redirect_uri=http%3a%2f%2fwx.teemax.com.cn%2fweixin%2fapp%2fgame_votes!auth.action%3factId%3d7%26paId%3d173%26redrectIndex%3ddetail&response_type=code&scope=snsapi_userinfo&state='+parameter['paId']+'#wechat_redirect',
-      imgUrl: fenxiang['imgUrl'],
+      title: '最美皇城小城，万元大奖等你来！！',
+      desc: '活动时间：10月14日至11月15日',
+      link: 'http://hcxz.k95.cn',
+      imgUrl: 'http://hcxz.k95.cn/images/logo.jpg',
       success: function () { 
         // 用户确认分享后执行的回调函数
+         // alert('已发送朋友');
       },
       cancel: function () { 
         // 用户取消分享后执行的回调函数
+         // alert('取消发送朋友');
       }
     });
     //分享到QQ

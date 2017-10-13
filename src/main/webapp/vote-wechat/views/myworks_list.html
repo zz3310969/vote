@@ -44,11 +44,19 @@
 	var parameter = getUrlParameter();window.parameter=parameter;
   if(!parameter["openId"]){
     parameter["openId"] = getCookie("wxopenid");
-  }	
+  }
   var ajaxpar = new Array();window.ajaxpar=ajaxpar;
     ajaxpar['isajaxing']=false;//是否正在请求数据  false情况下可以请求
+
+  var fenxiang=new Object();window.fenxiang=fenxiang;
+    fenxiang['title'] = '最美皇城小城，万元大奖等你来！！';
+    fenxiang['desc'] = '活动时间：10月14日至11月15日';
+    // fenxiang['link'] = 'http://mp.weixin.qq.com/s?__biz=MzI0MTYwMzA0Ng==&mid=2247483655&idx=1&sn=da16eaf5a3e8f9b919eee01b312ee365&chksm=e908598ede7fd09875b4bb3eacfead919b2d7492033de73ff7169927673eaeb01035cabafe13&mpshare=1&scene=1&srcid=1109kxQhsZiHj846t2lOgTBx#rd';
+    fenxiang['link'] = 'http://hcxz.k95.cn';
+    fenxiang['imgUrl'] = 'http://hcxz.k95.cn/images/logo.jpg';
+      
 	$(document).ready(function(e) {
-		// urlData();
+		urlData();
 		setData();
 		$('.js_ajax_list').scroll(function(){
 			var scrollTop = $(this).scrollTop();
@@ -61,34 +69,34 @@
 		});
   });
 	function urlData(){
-			var Yurl=window.location.href;
-			var datapost=new Object();
-				datapost['proId'] = parameter['paId'];
-				datapost['url'] = Yurl;
-			$.ajax({
-				type: "POST",
-				url:'http://wx.teemax.com.cn/weixin/app/wei_xin_lottery_code!getJsapiTicket.action', 
-				data: datapost,  
-				dataType: "jsonp",  
-				beforeSend: function(){
-						
-				},
-				success: function(resuleData) {
-					wx.config({
-						debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-						appId: resuleData.appId, // 必填，公众号的唯一标识
-						timestamp:resuleData.timestamp , // 必填，生成签名的时间戳
-						nonceStr: resuleData.noncestr, // 必填，生成签名的随机串
-						signature: resuleData.signature,// 必填，签名，见附录1
-						jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo','onMenuShareQZone'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-					});
-				},
-				error: function(resuleData) {
-					//请求出错处理
-					//alert('请求出错处理');
-				}
-			});
-	}
+      var Yurl=window.location.href;
+      var datapost=new Object();
+        // datapost['proId'] = parameter['paId'];
+        datapost['url'] = Yurl;
+      $.ajax({
+        type: "GET",
+        url:basePath + '/api/wechat/sign.action', 
+        data: datapost,  
+        beforeSend: function(){
+            
+        },
+        success: function(resp) {
+          var resuleData = resp.data;
+          wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: resuleData.appId, // 必填，公众号的唯一标识
+            timestamp:resuleData.timestamp , // 必填，生成签名的时间戳
+            nonceStr: resuleData.nonceStr, // 必填，生成签名的随机串
+            signature: resuleData.signature,// 必填，签名，见附录1
+            jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo','onMenuShareQZone'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+          });
+        },
+        error: function(resuleData) {
+          //请求出错处理
+          //alert('请求出错处理');
+        }
+      });
+    }
 
   function setData(){
     var dataget=new Object();
@@ -109,10 +117,13 @@
             $(".js_ajax_list").html(Handlebars.templates["templates/mywork_list"](products));
             $(".js_ajax_list").find("li").each(function(){
               var $li = $(this);
-              var $detailLink = $li.find("a.js_detail_a");
-              $detailLink.attr('href',"/views/detail.html?id="+$li.data("id")+"&openId="+user.openid+"&actId="+user.activity_code);
               var $img = $li.find("img[data-src]");
               $img.attr('src',basePath+"/api/vote/wechat/fileAction/getFile.action?filename="+$img.data('src'));
+              if($li.data('status')!='审核通过'){
+                return true;
+              }
+              var $detailLink = $li.find("a.js_detail_a");
+              $detailLink.attr('href',"/views/myworks.html?id="+$li.data("id")+"&openId="+parameter["openId"]+"&actId="+user.activity_code);
             })
           }
           $('.loading').fadeOut(); 
@@ -147,7 +158,7 @@
 		wx.onMenuShareAppMessage({
 			title: fenxiang['title'],
 			desc: fenxiang['desc'],
-			link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8a24fb8d9f60dbbd&redirect_uri=http%3a%2f%2fwx.teemax.com.cn%2fweixin%2fapp%2fgame_votes!auth.action%3factId%3d7%26paId%3d173%26redrectIndex%3ddetail&response_type=code&scope=snsapi_userinfo&state='+parameter['paId']+'#wechat_redirect',
+      link: fenxiang['link'],
 			imgUrl: fenxiang['imgUrl'],
 			success: function () { 
 				// 用户确认分享后执行的回调函数

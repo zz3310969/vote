@@ -1,12 +1,18 @@
 {{#each this}}
-<li data-id="{{id}}">
-    <a href="/detail.html" class="zwfbox js_detail_a">
+<li data-id="{{id}}" data-status='{{proStatusName}}'>
+    <a href="javascript:void(0);" class="zwfbox js_detail_a">
       <img class="zwfimg" src="/images/hcxz_zwf.png"/>
         <img class="pic" data-src="{{img_src}}"/>
         <span class="number">{{vote_code}}</span>
         <div class="tt">{{name}}</div>
     </a>
-    <div class="vt_txt"><span>票数：{{num}}票</span></div>
+    {{#equals proStatusName "审核通过"}}
+    <div class="vt_txt"><span>票数{{num}}：{{#if num}}{{num}}{{else}}0{{/if}}票</span></div>
+    {{#if index}}
     <div class="vt_txt"><span>排名：{{index}}</span></div>
+    {{/if}}
+    {{else}}
+     <div class="vt_txt"><span>{{proStatusName}}</span></div>
+    {{/equals}}
 </li>
 {{/each}}                

@@ -53,7 +53,7 @@
             </p>
         </div>
     </div>
-    <div class="ruletip js_ruletip"><img class="imgshow" src="/images/show_sucess.png"/></div>
+    <div class="ruletip js_ruletip"><img class="imgshow" src="/images/show_sucess.png" style="width:100%"/></div>
     <div class="loading"><img src="http://cdn.minsuyun.com/weixin/wap/l/6/images/loading1.gif"/></div>
     <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <script type="text/javascript" src="http://cdn.minsuyun.com/weixin/wap/js/jquery-2.1.0.min.js"></script>
@@ -81,9 +81,10 @@
       ajaxpar['isclipimg']=false;//是否是裁剪图
     var fenxiang=new Object();window.fenxiang=fenxiang;
       fenxiang['title'] = '最美皇城小城，万元大奖等你来！！';
-      fenxiang['desc'] = '活动时间：11月8日至11月23日';
-      fenxiang['link'] = 'http://mp.weixin.qq.com/s?__biz=MzI0MTYwMzA0Ng==&mid=2247483655&idx=1&sn=da16eaf5a3e8f9b919eee01b312ee365&chksm=e908598ede7fd09875b4bb3eacfead919b2d7492033de73ff7169927673eaeb01035cabafe13&mpshare=1&scene=1&srcid=1109kxQhsZiHj846t2lOgTBx#rd';
-      fenxiang['imgUrl'] = 'http://cdn.minsuyun.com/weixin/wap/v/7/images/banner.jpg';
+      fenxiang['desc'] = '活动时间：10月14日至11月15日';
+      // fenxiang['link'] = 'http://mp.weixin.qq.com/s?__biz=MzI0MTYwMzA0Ng==&mid=2247483655&idx=1&sn=da16eaf5a3e8f9b919eee01b312ee365&chksm=e908598ede7fd09875b4bb3eacfead919b2d7492033de73ff7169927673eaeb01035cabafe13&mpshare=1&scene=1&srcid=1109kxQhsZiHj846t2lOgTBx#rd';
+      fenxiang['link'] = 'http://hcxz.k95.cn';
+      fenxiang['imgUrl'] = 'http://hcxz.k95.cn/images/logo.jpg';
 
     // $('.js_myImg').click(function(){
     //   $("#file").click();
@@ -92,7 +93,7 @@
     //   $('#file').click();
     // });
     $(document).ready(function(e) {
-      // urlData();
+      urlData();
       bindUload();
       // $('#file').click(function(){
       //   ajaxpar['isclipimg']=false;
@@ -138,10 +139,10 @@
         beginGame();
       });
       $('.js_backlist').click(function(){
-        window.location.href='list.html?actId=7&paId=173&openId='+parameter['openId'];+'&id=1';
+        window.location.href='/views/list.html?actId='+parameter["actId"]+'&openId='+parameter['openId'];
         return false;
       });
-        });
+    });
       //提交用户数据 开启活动
     function beginGame(){
       //http://wx.teemax.com.cn/weixin/app/game_votes!queryMerchantslist.action?actId=7&paId=173&page=1&rows=16&merchants=&_=1478245801902
@@ -203,7 +204,7 @@
             if(resp.state=='success'){
               $('.js_ruletip').show();
               setTimeout(function() {
-                window.location.href = 'detail.html?id='+resp.data.id+'&openId='+parameter['openId']+"&actId="+parameter["actId"];
+                window.location.href = '/views/myworks.html?id='+resp.data.id+'&openId='+parameter['openId']+"&actId="+parameter["actId"];
               }, 500);
               
             }
@@ -221,22 +222,22 @@
     function urlData(){
       var Yurl=window.location.href;
       var datapost=new Object();
-        datapost['proId'] = parameter['paId'];
+        // datapost['proId'] = parameter['paId'];
         datapost['url'] = Yurl;
       $.ajax({
-        type: "POST",
-        url:'http://wx.teemax.com.cn/weixin/app/wei_xin_lottery_code!getJsapiTicket.action', 
+        type: "GET",
+        url:basePath + '/api/wechat/sign.action', 
         data: datapost,  
-        dataType: "jsonp",  
         beforeSend: function(){
             
         },
-        success: function(resuleData) {
+        success: function(resp) {
+          var resuleData = resp.data;
           wx.config({
             debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
             appId: resuleData.appId, // 必填，公众号的唯一标识
             timestamp:resuleData.timestamp , // 必填，生成签名的时间戳
-            nonceStr: resuleData.noncestr, // 必填，生成签名的随机串
+            nonceStr: resuleData.nonceStr, // 必填，生成签名的随机串
             signature: resuleData.signature,// 必填，签名，见附录1
             jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo','onMenuShareQZone'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
           });
@@ -267,7 +268,7 @@
     wx.onMenuShareAppMessage({
       title: fenxiang['title'],
       desc: fenxiang['desc'],
-      link: '',
+      link: fenxiang['link'],
       imgUrl: fenxiang['imgUrl'],
       success: function () { 
         // 用户确认分享后执行的回调函数
