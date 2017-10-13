@@ -12,6 +12,9 @@
 	<http pattern="/selin/fileAction/uploadFile.action*" security="none" />
 	
 	<http pattern="/vote/activityAction/**" security="none" />
+	<http pattern="/vote/voteAction/**" security="none" />
+	<http pattern="/vote/productionAction/**" security="none" />
+	<http pattern="/vote/activityuserAction/**" security="none" />
 	
 	<http pattern="/vote/wechat/voteWechatAction/**" security="none" />
 	<http pattern="/vote/wechat/applyWechatAction/**" security="none" />

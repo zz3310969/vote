@@ -88,16 +88,22 @@ public class ActivityAction {
 		this.loadCommon(model);
 		return "/selin/activity/activity_detail.jsp";
 	}
-	
+
 	@RequestMapping("/load")
 	public @ResponseBody Result load(Activity activity) {
 		activity = activityService.load(activity);
-		return new Result(Result.SUCCESS,activity);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("activity", activity);
+		map.put("vals", ActivityStatusEnum.getAll());
+
+		return new Result(Result.SUCCESS, map);
 	}
 
 	@RequestMapping("/create")
 	public @ResponseBody Result create(@RequestBody Activity activity) {
 		if (activity != null) {
+			activity.setStatus(ActivityStatusEnum.newact.getCode());
+			activity.setCreate_date(new Date());
 			activityService.save(activity);
 			return new Result("保存成功!");
 		} else {
@@ -108,6 +114,7 @@ public class ActivityAction {
 	@RequestMapping("/update")
 	public @ResponseBody Result update(@RequestBody Activity activity) {
 		if (activity != null) {
+			activity.setUpdate_date(new Date());
 			activityService.updateIgnoreNull(activity);
 			return new Result("保存成功!");
 		} else {
