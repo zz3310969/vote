@@ -1,8 +1,13 @@
 package com.roof.vote.production.action;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+
+import com.alibaba.fastjson.JSON;
+import com.roof.vote.common.ProductionStatusEnum;
 import org.roof.roof.dataaccess.api.Page;
 import org.roof.roof.dataaccess.api.PageUtils;
 import org.roof.spring.Result;
@@ -52,6 +57,13 @@ public class ProductionAction {
     Page page = PageUtils.createPage(request);
     page = productionService.page(page, production);
     return new Result(Result.SUCCESS,page);
+	}
+
+	@RequestMapping("/base")
+	public @ResponseBody Result base(HttpServletRequest request) {
+		Map<String,Object> map = new HashMap<>();
+		map.put("status", ProductionStatusEnum.getProductionStatusEnums());
+		return new Result(Result.SUCCESS,map);
 	}
 	
 	

@@ -1,5 +1,10 @@
 package com.roof.vote.common;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public enum ProductionStatusEnum {
 	waitProcess("waitProcess", "等待审核"), processed("processed", "审核通过"), cancel("cancel",
 			"取消"), managecancel("managecancel", "审核不通过作废");
@@ -40,5 +45,20 @@ public enum ProductionStatusEnum {
 			}
 		}
 		return "";
+	}
+
+	public static List<Map<String,String>> getProductionStatusEnums(){
+		List<Map<String,String>> list = new ArrayList<>();
+		ProductionStatusEnum[] inventoryEventEnums = ProductionStatusEnum.values();
+		for (ProductionStatusEnum eventEnum :inventoryEventEnums) {
+
+			Map<String,String> map = new HashMap<>(2);
+			map.put("value",eventEnum.getCode());
+			map.put("text",eventEnum.getName());
+
+			list.add(map);
+
+		}
+		return list;
 	}
 }

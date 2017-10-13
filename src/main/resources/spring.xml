@@ -21,7 +21,7 @@
 	<!-- AOP配置 -->
 	<aop:aspectj-autoproxy />
 	<!-- 扫描组件 -->
-	<context:component-scan base-package="org.roof.*,org.roof.web.*,com.roof.vote.*" />
+	<context:component-scan base-package="org.roof.*,org.roof.web.*,com.roof.vote.*,com.roof.*," />
 	<bean id="propertyConfigurer"
 		class="org.roof.commons.CustomizedPropertyPlaceholderConfigurer">
 		<property name="locations">

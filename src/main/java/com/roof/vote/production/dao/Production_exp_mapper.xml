@@ -8,6 +8,45 @@
 		t1.create_date, t1.update_date
 	</sql>
 
+	<sql id="condsAs">
+		<if test="id != null">
+			and t1.id = #{id}
+		</if>
+		<if test="name != null and name != ''">
+			and t1.name = #{name}
+		</if>
+		<if test="activity_code != null and activity_code != ''">
+			and t1.activity_code = #{activity_code}
+		</if>
+		<if test="user_id != null">
+			and t1.user_id = #{user_id}
+		</if>
+		<if test="remark != null and remark != ''">
+			and t1.remark = #{remark}
+		</if>
+		<if test="img_src != null and img_src != ''">
+			and t1.img_src = #{img_src}
+		</if>
+		<if test="img_src_thumb != null and img_src_thumb != ''">
+			and t1.img_src_thumb = #{img_src_thumb}
+		</if>
+		<if test="status != null and status != ''">
+			and t1.status = #{status}
+		</if>
+		<if test="vote_code != null and vote_code != ''">
+			and t1.vote_code = #{vote_code}
+		</if>
+		<if test="upload_date != null">
+			and t1.upload_date = #{upload_date}
+		</if>
+		<if test="create_date != null">
+			and t1.create_date = #{create_date}
+		</if>
+		<if test="update_date != null">
+			and t1.update_date = #{update_date}
+		</if>
+	</sql>
+
 	<select id="selectProductByuserid" resultType="com.roof.vote.production.entity.ProductionVo">
 		select
 		p.id,
@@ -47,20 +86,17 @@
 		select
 		<include refid="columnsAs" />
 		,
-		t3.name as username
+		t3.name as username,
+		t3.tel as usertel,
+		(SELECT  name from v_activity WHERE code = t1.activity_code ) as actName
 		from
 		v_production t1
-		join
-		(SELECT
-		id
-		from
-		v_production
-		where 1=1
-		<include refid="conds" />
-		order by id asc
-		limit #{firstrownum}, #{limit}) t2 left join
+		left join
 		v_activity_user t3 on t1.user_id = t3.id
-		where t1.id = t2.id
+		where 1 = 1
+		<include refid="condsAs" />
+		order by t1.id asc
+		limit #{firstrownum}, #{limit}
 	</select>
 
 	<select id="selectProductionCount" resultType="java.lang.Long">

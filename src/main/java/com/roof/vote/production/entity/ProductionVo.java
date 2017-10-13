@@ -3,6 +3,7 @@ package com.roof.vote.production.entity;
 import java.util.List;
 
 import com.roof.vote.activityuser.entity.ActivityUserVo;
+import com.roof.vote.common.ProductionStatusEnum;
 
 /**
  * @author 模版生成 <br/>
@@ -28,6 +29,7 @@ public class ProductionVo extends Production {
 	private Long vote_limit;
 
 	private String username;// 参赛用户名
+	private String usertel;// 参赛号码
 
 	private Double num;// 当前票数
 
@@ -36,6 +38,9 @@ public class ProductionVo extends Production {
 	private Double perNum;// 上一个票数
 
 	private Double marginNum;// 票差
+
+	private String statusName;
+
 
 	public ProductionVo() {
 		super();
@@ -150,4 +155,22 @@ public class ProductionVo extends Production {
 		this.marginNum = marginNum;
 	}
 
+	public String getUsertel() {
+		return usertel;
+	}
+
+	public void setUsertel(String usertel) {
+		this.usertel = usertel;
+	}
+
+	public String getStatusName() {
+		if(status != null){
+			statusName = ProductionStatusEnum.getStatusEnumName(status);
+		}
+		return statusName;
+	}
+
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
+	}
 }
