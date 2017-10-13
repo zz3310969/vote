@@ -41,6 +41,7 @@
             <div class="formInput">
               <span class="errortip"></span>
                 <p><input type="text" id="name" placeholder="请输入作品名称" value=""/></p>
+                <p><input type="text" id="userName" placeholder="请输入姓名或单位名称" value=""/></p>
                 <p><input type="tel" id="phone" placeholder="请输入您的联系电话" value=""/></p>
                 <p class="txtarea"><textarea id="intro" placeholder="请输入作品介绍"></textarea></p>
             </div>
@@ -67,8 +68,7 @@
     <script type="text/javascript" src="/scripts/templates.js"></script>
     <script type="text/javascript" src="/plugins/cookie.js"></script>
     <script type="text/javascript">
-      // var basePath = "http://hcxz.k95.cn";
-      var basePath = "http://134.98.102.192:3000";
+      var basePath = "http://hcxz.k95.cn";
       require("helper");
     var parameter = getUrlParameter();window.parameter=parameter;
     if(!parameter["openId"]){
@@ -114,6 +114,12 @@
           $("#name").focus();
           return false;
         }
+        var userName = $("#userName").val();
+        if(userName.length<2){
+          $('.errortip').html('请输入姓名或单位名称！');
+          $("#userName").focus();
+          return false;
+        }
         var phone = $("#phone").val();
         if(!isTel(phone)){
           $('.errortip').html('请输入正确的手机号码！');
@@ -151,6 +157,12 @@
         $("#name").focus();
         return false;
       }
+      var userName = $("#userName").val();
+      if(userName.length<2){
+        $('.errortip').html('请输入姓名或单位名称！');
+        $("#userName").focus();
+        return false;
+      }
       var phone = $("#phone").val();
       if(!isTel(phone)){
         $('.errortip').html('请输入正确的手机号码！');
@@ -175,6 +187,7 @@
         // dataget['annotation'] = annotation;
         dataget['name'] = name;
         dataget['user.tel'] = phone;
+        dataget['user.name'] = userName;
         dataget['img_src'] = $("#portrait").data('img-src');
       if(!ajaxpar['isajaxing']){
         ajaxpar['isajaxing'] = true;
