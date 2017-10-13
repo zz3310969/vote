@@ -29,7 +29,8 @@
           <div class="imgupload">
                 <div class="userimg show js_userimg">
                     <div id="clipArea"></div>
-                    <input type="file" id="file" >
+                    <!-- <input type="file" id="file" > -->
+                    <div  id="file" ></div>
                     <!-- onchange="showPreview(this)" -->               
                     <!-- <input type="text" value=""  id="view" /> -->
                     <div id="view1"> </div>
@@ -40,8 +41,8 @@
             </div>
             <div class="formInput">
               <span class="errortip"></span>
-                <p><input type="text" id="name" placeholder="请输入作品名称" value=""/></p>
                 <p><input type="text" id="userName" placeholder="请输入姓名或单位名称" value=""/></p>
+                <p><input type="text" id="name" placeholder="请输入作品名称" value=""/></p>
                 <p><input type="tel" id="phone" placeholder="请输入您的联系电话" value=""/></p>
                 <p class="txtarea"><textarea id="intro" placeholder="请输入作品介绍"></textarea></p>
             </div>
@@ -351,11 +352,17 @@
               maxWidth: 1024
           },
           on: {
+              add: function (task) {
+                $(".loading").fadeIn();  
+              },
               complete:function(resp){
-                if(resp.state=="success"){
+                $(".loading").fadeOut(); 
+                if(resp.json.state=="success"){
                   var picId = resp.json.data;
                   // var picId = 1;
                   $("#portrait").attr('src',basePath+"/api/vote/wechat/fileAction/getFile.action?filename="+picId);
+
+                  console.log( $("#portrait").attr('src'))
                   $("#portrait").data('img-src',picId)
                   ajaxpar['firstimg'] = false;
                   $("#view1").hide();
