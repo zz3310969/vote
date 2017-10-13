@@ -266,6 +266,12 @@
         },
         success: function(resp) {
           $(".js_ajax_list").html(Handlebars.templates["list/templates/list"](resp.data.dataList||[]));
+
+          $(".js_ajax_list").find("a.zwfbox").each(function(){
+            var url = "/views/detail.html?id="+$(this).data('id')+"&openId="+parameter["openId"]+"&actId="+parameter['actId'];
+            $(this).attr('href',basePath+url)
+          })
+
           resetVote();
           ajaxpar['isajaxing'] = false;
           $('.loading').fadeOut();  

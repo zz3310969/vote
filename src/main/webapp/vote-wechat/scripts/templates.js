@@ -3,7 +3,9 @@
   templates["list/templates/list"] = template({"1":function(container,depth0,helpers,partials,data) {
     var helper;
 
-  return "<li>\r\n    <a href=\"/detail\" class=\"zwfbox\">\r\n      <img class=\"zwfimg\" src=\"/images/hcxz_zwf.png\"/>\r\n        <img class=\"pic\" src=\"/images/tip.jpg\"/>\r\n        <span class=\"number\">"
+  return "<li>\r\n    <a href=\"\" class=\"zwfbox\" data-id=\""
+    + container.escapeExpression(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"id","hash":{},"data":data}) : helper)))
+    + "\">\r\n      <img class=\"zwfimg\" src=\"/images/hcxz_zwf.png\"/>\r\n        <img class=\"pic\" src=\"/images/tip.jpg\"/>\r\n        <span class=\"number\">"
     + container.escapeExpression(((helper = (helper = helpers.vote_code || (depth0 != null ? depth0.vote_code : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"vote_code","hash":{},"data":data}) : helper)))
     + "</span>\r\n        <div class=\"tt\">"
     + container.escapeExpression(((helper = (helper = helpers.username || (depth0 != null ? depth0.username : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"username","hash":{},"data":data}) : helper)))
