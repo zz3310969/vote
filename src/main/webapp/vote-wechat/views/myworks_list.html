@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="zh_CN">
+<head>
+    <meta charset="UTF-8">
+    <title>南宋皇城小镇</title>
+    <meta name="Description" content="">
+    <meta name="Keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="apple-mobile-web-app-title" content=""/>
+    <meta name="apple-touch-fullscreen" content="YES" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta http-equiv="x-rim-auto-match" content="none" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body style="overflow: hidden; background-color:#ccc;">
+
+
+<div class="landscape" style="display: none;">
+    <div class="con">
+        <p class="word">请切换到竖屏浏览</p>
+    </div>
+</div>
+    <div class="page page02">
+        <img class="topimg" src="/images/tt_myworks.png" style="margin:20px auto" />
+        
+        <div class="search myworks">
+            <ul class="list js_ajax_list"> </ul>
+        </div>
+    </div>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript" src="http://cdn.minsuyun.com/weixin/wap/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="/scripts/vendor.js"></script>
+<script type="text/javascript" src="/scripts/app.js"></script>
+<script type="text/javascript" src="/scripts/templates.js"></script>
+<script type="text/javascript" src="/plugins/cookie.js"></script>
+<script type="text/javascript">
+  var basePath = "http://hcxz.k95.cn";
+  require("helper");
+	var parameter = getUrlParameter();window.parameter=parameter;
+  if(!parameter["openId"]){
+    parameter["openId"] = getCookie("wxopenid");
+  }	
+  var ajaxpar = new Array();window.ajaxpar=ajaxpar;
+    ajaxpar['isajaxing']=false;//是否正在请求数据  false情况下可以请求
+	$(document).ready(function(e) {
+		// urlData();
+		setData();
+		$('.js_ajax_list').scroll(function(){
+			var scrollTop = $(this).scrollTop();
+			var scrollHeight = $(this)[0].scrollHeight-60;
+			var windowHeight = $(this).height();
+			if(scrollTop + windowHeight >= scrollHeight){
+				//setData();
+				//滚动加载
+			}
+		});
+  });
+	function urlData(){
+			var Yurl=window.location.href;
+			var datapost=new Object();
+				datapost['proId'] = parameter['paId'];
+				datapost['url'] = Yurl;
+			$.ajax({
+				type: "POST",
+				url:'http://wx.teemax.com.cn/weixin/app/wei_xin_lottery_code!getJsapiTicket.action', 
+				data: datapost,  
+				dataType: "jsonp",  
+				beforeSend: function(){
+						
+				},
+				success: function(resuleData) {
+					wx.config({
+						debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+						appId: resuleData.appId, // 必填，公众号的唯一标识
+						timestamp:resuleData.timestamp , // 必填，生成签名的时间戳
+						nonceStr: resuleData.noncestr, // 必填，生成签名的随机串
+						signature: resuleData.signature,// 必填，签名，见附录1
+						jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo','onMenuShareQZone'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+					});
+				},
+				error: function(resuleData) {
+					//请求出错处理
+					//alert('请求出错处理');
+				}
+			});
+	}
+
+  function setData(){
+    var dataget=new Object();
+      dataget['openid'] = parameter['openId'];
+    if(!ajaxpar['isajaxing']){
+      ajaxpar['isajaxing'] = true;
+      $.ajax({
+        type: "GET",
+        url:basePath+'/api/vote/wechat/applyWechatAction/loadUserInfo.action',
+        data: dataget,  
+        beforeSend: function(){
+          $('.loading').fadeIn();     
+        },
+        success: function(resultData) {
+          if(resultData.state=="success"){
+            var user = resultData.data;
+            var products = user.products;
+            $(".js_ajax_list").html(Handlebars.templates["templates/mywork_list"](products));
+            $(".js_ajax_list").find("li").each(function(){
+              var $li = $(this);
+              var $detailLink = $li.find("a.js_detail_a");
+              $detailLink.attr('href',"/views/detail.html?id="+$li.data("id")+"&openId="+user.openid+"&actId="+user.activity_code);
+              var $img = $li.find("img[data-src]");
+              $img.attr('src',basePath+"/api/vote/wechat/fileAction/getFile.action?filename="+$img.data('src'));
+            })
+          }
+          $('.loading').fadeOut(); 
+          ajaxpar['isajaxing'] = false;
+        } ,
+        error:function(){
+          $('.loading').fadeOut(); 
+          ajaxpar['isajaxing'] = false;
+        }   
+      });
+    }
+  }
+
+
+	wx.ready(function () {
+		//分享到朋友圈
+		wx.onMenuShareTimeline({
+			title: fenxiang['title'],
+			desc: fenxiang['desc'],
+			link: fenxiang['link'],
+			imgUrl: fenxiang['imgUrl'],
+			success: function () { 
+				//分享到朋友圈成功，开启活动
+				//alert('已分享到朋友圈');
+				beginGame();
+			},
+			cancel: function () { 
+				//alert('已取消分享');
+			}
+		});
+		//发送给朋友
+		wx.onMenuShareAppMessage({
+			title: fenxiang['title'],
+			desc: fenxiang['desc'],
+			link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8a24fb8d9f60dbbd&redirect_uri=http%3a%2f%2fwx.teemax.com.cn%2fweixin%2fapp%2fgame_votes!auth.action%3factId%3d7%26paId%3d173%26redrectIndex%3ddetail&response_type=code&scope=snsapi_userinfo&state='+parameter['paId']+'#wechat_redirect',
+			imgUrl: fenxiang['imgUrl'],
+			success: function () { 
+				// 用户确认分享后执行的回调函数
+			},
+			cancel: function () { 
+				// 用户取消分享后执行的回调函数
+			}
+		});
+		//分享到QQ
+		wx.onMenuShareQQ({
+			title: fenxiang['title'],
+			desc: fenxiang['desc'],
+			link: fenxiang['link'],
+			imgUrl: fenxiang['imgUrl'],
+			success: function () { 
+				// 用户确认分享后执行的回调函数
+			},
+			cancel: function () { 
+				// 用户取消分享后执行的回调函数
+			}
+		});
+		//分享到腾讯微博
+		wx.onMenuShareWeibo({
+			title: fenxiang['title'],
+			desc: fenxiang['desc'],
+			link: fenxiang['link'],
+			imgUrl: fenxiang['imgUrl'],
+			success: function () { 
+				// 用户确认分享后执行的回调函数
+			},
+			cancel: function () { 
+				// 用户取消分享后执行的回调函数
+			}
+		});
+		//分享到QQ空间
+		wx.onMenuShareQZone({
+			title: fenxiang['title'],
+			desc: fenxiang['desc'],
+			link: fenxiang['link'],
+			imgUrl: fenxiang['imgUrl'],
+			success: function () { 
+				// 用户确认分享后执行的回调函数
+			},
+			cancel: function () { 
+				// 用户取消分享后执行的回调函数
+			}
+		});
+	});
+	function getUrlParameter(){
+		var url = location.search,value;
+		var returnArray = new Array();
+		if (url.indexOf("?") != -1) {
+			var str = url.substr(1);
+			strs = str.split("&");
+			for(var i = 0; i < strs.length; i ++) {
+				returnArray[strs[i].split("=")[0]]=decodeURIComponent(strs[i].split("=")[1]);
+			}
+		}
+		return returnArray;
+	}
+</script>
+</body>
+</html>

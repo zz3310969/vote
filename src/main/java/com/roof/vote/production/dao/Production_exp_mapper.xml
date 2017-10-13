@@ -73,12 +73,38 @@
 		p.status, p.vote_code, p.upload_date, p.create_date,
 		p.update_date,a.name as actName,a.remark as actRemark,a.status as
 		actStatus,
-		a.vote_limit as vote_limit
+		a.vote_limit as vote_limit,
+		u.name as username ,u.tel as
+		usertel
 		from v_production p left join
 		v_activity a
-		on p.activity_code = a.code
-		where p.activity_code=#{activity_code}
+		on p.activity_code =
+		a.code
+		left join v_activity_user u on p.user_id = u.id
+		where
+		p.activity_code=#{activity_code}
 		and p.vote_code = #{vote_code}
+	</select>
+
+	<select id="selectProBycode" resultType="com.roof.vote.production.entity.ProductionVo">
+		select
+		p.id,
+		p.name,
+		p.activity_code, p.user_id, p.remark, p.img_src,
+		p.img_src_thumb,
+		p.status, p.vote_code, p.upload_date, p.create_date,
+		p.update_date,a.name as actName,a.remark as actRemark,a.status as
+		actStatus,
+		a.vote_limit as vote_limit,
+		u.name as username ,u.tel as
+		usertel
+		from v_production p left join
+		v_activity a
+		on p.activity_code =
+		a.code
+		left join v_activity_user u on p.user_id = u.id
+		where
+		p.activity_code=#{activity_code}
 	</select>
 
 

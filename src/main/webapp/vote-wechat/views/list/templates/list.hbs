@@ -1,0 +1,18 @@
+{{#each this}}
+<li>
+    <a href="" class="zwfbox" data-id="{{id}}">
+      <img class="zwfimg" src="/images/hcxz_zwf.png"/>
+        <img class="pic" src="/images/tip.jpg"/>
+        <span class="number">{{vote_code}}</span>
+        <div class="tt">{{username}}</div>
+    </a>
+    <div class="name"><span><i>{{num}}</i>票</span><div class="pic_user">
+        <img src="/images/tip.jpg"/>{{name}}</div></div>
+        <div class="btn">
+        <input type="button" datacode="{{vote_code}}" class="btntp js_vote" value="投票"/>
+        <div class="numCon js_numsbox"><button class="js_minus minus">-</button>
+            <input type="text" class="js_cart_addnum txt" value="1"  pattern="[0-9]*"/><button class="js_plus plus">+</button>
+        </div>
+    </div>
+</li>
+{{/each}}

@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="zh_CN">
+<head>
+    <meta charset="UTF-8">
+    <title>南宋皇城小镇</title>
+    <meta name="Description" content="">
+    <meta name="Keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="apple-mobile-web-app-title" content=""/>
+    <meta name="apple-touch-fullscreen" content="YES" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta http-equiv="x-rim-auto-match" content="none" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body style="overflow: hidden; background-color:#ccc;">
+<div class="landscape" style="display: none;">
+    <div class="con">
+        <p class="word">请切换到竖屏浏览</p>
+    </div>
+</div>
+    <div class="page page02">
+        <img class="topimg" src="/images/list_img1.png" />
+        <div class="btnlist">
+          <span class="rule js_rule"><!--规则--></span>
+            <span class="sinup js_ranking"><!--排行榜--></span>
+            <span class="rank js_signup"><!--我的作品--></span>
+        </div>
+        <div class="search">
+          <div class="sh_num">今日可投<b class="js_ticknum"></b>票</div>
+            <p class="formValue">
+                <input type="text" class="txtvalue" id="keyvalue" value="" placeholder="请输入编号"/>
+                <input type="button" class="btnvalue js_searchList" value=""/>
+            </p>
+            <ul class="list js_ajax_list"></ul>
+        </div>
+    </div>
+    <div class="btn_share js_btnyq">分享给好友</div>
+    <div class="shareimg js_sharebox"><img src="/images/shareimg.png" /></div>
+    <!--规则-->
+    <div class="ruletip js_ruletip">
+      <div class="rulesBox">
+        <div class="btn_del js_btndel"><img src="/images/btn_del.png"/></div>
+        <div class="rulesTop"><img src="/images/rulesTop.png" alt="" /></div>
+        <div class="wrap">
+            <div class="rulesCenter"></div>
+            <div class="rulesBottom"><img src="/images/rulesbottom.png" alt="" /></div>
+        </div>
+        <div class="info">
+            <div class="txt">
+                <h3>活动时间</h3>
+                <p>2017年<i>10</i>月<i>14</i>日~<i>11</i>月<i>15</i>日</p>
+                <h3>奖项设置</h3>
+                <p><b><i>一等奖</i></b>现金红包<i>10000元</i></p>
+                <p><b><i>二等奖</i></b>现金红包<i>5000元</i></p>
+                <p><b><i>三等奖</i></b>现金红包<i>2000元</i></p>
+                <p><b><i>入围奖</i></b>现金红包<i>1000元</i></p>
+                <h3>作品征集要求 </h3>
+                <p>（1）参赛作品应符合赛事主题和内容，具有前瞻性、创造性、文化性及示范性。</p>
+                    <p>（2）提交作品应为报名者本人的原创作品，报名者需对提交作品拥有完整、排他的著作权或知识产权，且未侵犯任何第三方的合法权益。</p>
+                    <p>（3）提交作品应符合国家法律，不得出现违法及有损大赛形象的内容。</p>
+                    <p>（4）参赛作品可以单位或个人名义进行申报，鼓励多学科人员参加，组成跨专业、跨学科的设计团队。</p>
+                    <p>（5）所有参赛作品应为原创设计，已实施方案、已参加过各类评审、已参加过其他竞赛或曾经发表过的作品不得参赛。</p>
+                    <p>（6）参加竞赛的个人或团队应遵守赛事规则及其他相关要求，主办方对赛事规则具有最终解释权。未侵犯任何第三方的合法权益。</p>
+                    <p>（3）提交作品应符合国家法律，不得出现违法及有损大赛形象的内容。</p>
+                    <p>（4）参赛作品可以单位或个人名义进行申报，鼓励多学科人员参加，组成跨专业、跨学科的设计团队。</p>
+                    <p>（5）所有参赛作品应为原创设计，已实施方案、已参加过各类评审、已参加过其他竞赛或曾经发表过的作品不得参赛。</p>
+                    <p>（6）参加竞赛的个人或团队应遵守赛事规则及其他相关要求，主办方对赛事规则具有最终解释权。</p>
+            </div>
+        </div>
+        </div>
+    </div>
+    <!--排行榜-->
+    <div class="ruletip js_rankBox">
+      <div class="rulesBox">
+        <div class="btn_del js_rankdel"><img src="/images/btn_del.png"/></div>
+        <div class="rulesTop"><img src="/images/rankTop.png" alt="" /></div>
+        <div class="wrap">
+            <div class="rulesCenter"></div>
+            <div class="rulesBottom"><img src="/images/rulesbottom.png" alt="" /></div>
+        </div>
+        <div class="info">
+            <div class="txt">
+                <ul id="orderList">
+                </ul>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="loading"><img src="http://cdn.minsuyun.com/weixin/wap/l/6/images/loading1.gif"/></div>
+    <!--投票成功提示-->
+    <div class="votetip js_votetip">
+      <div class="votetip_box">
+          <div class="btn btn_del"><img src="/images/btn_del.png"/></div>
+          <div class="tt"><img src="/images/img_show_fz.png"/></div>
+            <div class="box">
+              <h3>投票成功</h3>
+                <p>您还有<b class="js_votelast"></b>次机会</p>
+            </div>
+        </div>
+    </div>
+<div class="votetip js_votetip2">
+  <div class="votetip_box">
+      <div class="btn btn_del"><img src="/images/btn_del.png"/></div>
+      <div class="tt"><img src="/images/img_show_fz.png"/></div>
+        <div class="box">
+          <p>您今天的投票次数用完了,<br>明天再来吧！</p>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript" src="http://cdn.minsuyun.com/weixin/wap/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript" src="/scripts/vendor.js"></script>
+<script type="text/javascript" src="/scripts/app.js"></script>
+<script type="text/javascript" src="/scripts/templates.js"></script>
+<script type="text/javascript" src="/plugins/cookie.js"></script>
+<script type="text/javascript">
+  var basePath = "http://hcxz.k95.cn";
+  require("helper");
+  var ticketNum=5;
+  var parameter = getUrlParameter();window.parameter=parameter;
+  if(!parameter["openId"]){
+    parameter["openId"] = getCookie("wxopenid");
+  }
+
+  var ajaxpar = new Array();window.ajaxpar=ajaxpar;
+    ajaxpar['isajaxing']=false;//是否正在请求数据  false情况下可以请求
+    ajaxpar['pagenow']=1;//当前页
+    ajaxpar['pagenum']=16;//每页显示数量
+    ajaxpar['islastpage']=false;//是否最后一页
+    ajaxpar['merchants']=$("#keyvalue").val();//关键词
+    ajaxpar['isajaxing2']=false;//是否正在请求数据  false情况下可以请求
+    ajaxpar['pagenow2']=1;//当前页
+    ajaxpar['islastpage2']=false;//是否最后一页
+    ajaxpar['numrank2']=1;
+    ajaxpar['lastvote']=0;
+    ajaxpar['isRegister']=0;
+    ajaxpar['isRegisterId']=0;
+  var fenxiang=new Object();window.fenxiang=fenxiang;
+    fenxiang['title'] = '最美皇城小城，万元大奖等你来！！';
+    fenxiang['desc'] = '活动时间：11月8日至11月23日';
+    fenxiang['link'] = 'http://mp.weixin.qq.com/s?__biz=MzI0MTYwMzA0Ng==&mid=2247483655&idx=1&sn=da16eaf5a3e8f9b919eee01b312ee365&chksm=e908598ede7fd09875b4bb3eacfead919b2d7492033de73ff7169927673eaeb01035cabafe13&mpshare=1&scene=1&srcid=1109kxQhsZiHj846t2lOgTBx#rd';
+    fenxiang['imgUrl'] = 'http://cdn.minsuyun.com/weixin/wap/v/7/images/banner.jpg';
+    window.onload=function(){
+    $('.page03Txt').animate({opacity: 1, translateX: 0}, 500);
+    };
+  $(document).ready(function(e) {
+    //urlData();
+    voteNum();
+    setData();
+    /*数量增加*/
+    $(".js_ajax_list").on("click","li .js_plus",function(){
+      var num = parseInt($(this).siblings('.js_cart_addnum').val());
+      if(num<ticketNum){
+        $(this).siblings('.js_cart_addnum').val(num+1);
+        $(this).parents('li').find('.js_num').text(num+1);
+      }else if(ajaxpar['lastvote']==0){
+        msgover();
+      }else{
+        $("body").append('<div class="tips_show_bottom">今天最多可投'+ticketNum+'票</div>');
+        setTimeout(function(){
+          $(".tips_show_bottom").remove();
+        },500)
+      }
+    });
+    $(".js_ajax_list").on("click","li .js_minus",function(){
+      var num = parseInt($(this).siblings('.js_cart_addnum').val());
+      if(num>1){
+        $(this).siblings('.js_cart_addnum').val(num-1);
+        $(this).parents('li').find('.js_num').text(num-1);
+      }else{
+        $("body").append('<div class="tips_show_bottom">票数不能在少喽</div>');
+        setTimeout(function(){
+          $(".tips_show_bottom").remove();
+        },500)
+      }
+    });
+    /*分享好友*/
+    $(".js_btnyq").click(function(){
+      $(".js_sharebox").show();
+    });
+    //列表搜索
+    $('.js_searchList').bind('click',function(){
+      ajaxpar['vote_code']=$("#keyvalue").val();
+      ajaxpar['islastpage']=false;
+      ajaxpar['pagenow']=1;
+      setData();
+    });
+    $('.js_ajax_list').scroll(function(){
+      var scrollTop = $(this).scrollTop();
+      var scrollHeight = $(this)[0].scrollHeight-60;
+      var windowHeight = $(this).height();
+      if(scrollTop + windowHeight >= scrollHeight){
+        //setData();
+        //console.log(scrollTop + windowHeight);
+      }
+    });
+    //我的作品
+    $('.js_signup').bind('click',function(){
+      if(ajaxpar['isRegister']==0){
+        window.location.href='/views/myworks.html?actId='+parameter['actId']+'&paId='+parameter['paId']+'&openId='+parameter['openId'];
+      }
+    });
+    //规则提示
+    $('.js_rule').click(function(){
+      $('.js_ruletip').fadeIn();
+      return false;
+    });
+    $('.js_ruletip .js_btndel').click(function(){
+      $('.js_ruletip').fadeOut();
+      return false;
+    });
+    //名次
+    $('.js_ranking').click(function(){
+      setRankListData(function(){
+        $('.js_rankBox').fadeIn();
+      })
+      return false;
+    });
+    $('.js_rankBox .js_rankdel').click(function(){
+      $('.js_rankBox').fadeOut();
+      return false;
+    }); 
+    $(".js_votetip .btn_del").click(function(){
+      $(".js_votetip").hide();
+    });
+
+    $(".js_votetip2 .btn_del").click(function(){
+      $(".js_votetip2").hide();
+    });
+    // $('.js_ajax_list2').scroll(function(){
+    //   var scrollTop = $(this).scrollTop();
+    //   var scrollHeight = $(this)[0].scrollHeight-60;
+    //   var windowHeight = $(this).height();
+    //   if(scrollTop + windowHeight >= scrollHeight){
+    //     setRankListData();
+    //     //console.log(scrollTop + windowHeight);
+    //   }
+    // });
+  });
+  //列表接口
+  function setData(){
+    var dataget=new Object();
+      dataget['actId'] = parameter['actId'];
+      dataget['paId'] = parameter['paId'];
+      dataget['page'] = ajaxpar['pagenow'];
+      dataget['rows'] = ajaxpar['pagenum'];
+      dataget['openId'] = parameter["openId"];
+      dataget['acode'] = parameter['actId'];
+      dataget['vote_code'] = $('#keyvalue').val();
+    if(!ajaxpar['isajaxing']&&!ajaxpar['islastpage']){
+      //actId=7&openId=oV9bxwz-gMp4kqaBkPi9GyjQciVU&paId=172&merchants=2
+      ajaxpar['isajaxing'] = true;
+
+      $.ajax({
+        type: "POST",
+        url:basePath+'/api/vote/wechat/voteWechatAction/pagePros.action', 
+        data: dataget,  
+        // dataType: "jsonp",
+        beforeSend: function(){
+          $(".loading").fadeIn();  
+        },
+        success: function(resp) {
+          $(".js_ajax_list").html(Handlebars.templates["list/templates/list"](resp.data.dataList||[]));
+
+          $(".js_ajax_list").find("a.zwfbox").each(function(){
+            var url = "/views/detail.html?id="+$(this).data('id')+"&openId="+parameter["openId"]+"&actId="+parameter['actId'];
+            $(this).attr('href',basePath+url)
+          })
+
+          resetVote();
+          ajaxpar['isajaxing'] = false;
+          $('.loading').fadeOut();  
+          if(parseInt(ajaxpar["lastvote"])<=0){
+            $(".js_vote").addClass('over').removeClass('js_vote')
+          }
+        },
+        error: function(resuleData) {
+          $(".loading").fadeOut();
+          //请求出错处理
+          //alert('请求出错处理');
+        }
+      });
+
+      return false
+    }
+  }
+  function resetVote(){
+    $('.js_ajax_list .btntp').unbind("click");
+    $('.js_ajax_list .js_vote').bind('click',function(){
+      if(ajaxpar['lastvote']<=0){
+        msgover();
+        return false;
+      }
+      var $this = $(this);
+      //开始投票
+      //merchantsId=217&openId=oV9bxw8Mx2wZ_IDBtbcoo4MhY_xc&paId=172&actId=7actId=7&paId=173
+      if(!ajaxpar['isajaxing']){
+        ajaxpar['isajaxing'] = true;
+        var dataget=new Object();
+        dataget['activity_code'] = parameter['actId'];
+        dataget["vote_code"] = $(this).attr('datacode');
+        dataget["vote_num"] = $this.parents("li").find('.js_cart_addnum').val();
+        dataget['vote_user_openid'] = parameter['openId'];
+        var thisbtn = $(this);window.thisbtn=thisbtn;
+        if(thisbtn.attr("datacode")>0){
+          $.ajax({
+            type: "GET",
+            url:basePath+'/api/vote/wechat/voteWechatAction/vote.action',
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            data: dataget,  
+            beforeSend: function(){
+              $('.loading').fadeIn();     
+            },
+            success: function(resuleData) {
+              if(resuleData.state=='success'){
+                ajaxpar['lastvote']= parseInt(ajaxpar['lastvote']) - parseInt(dataget["vote_num"]);
+                var spannum = thisbtn.parents('li').find('.name span i');
+                var numnew =  parseInt(spannum.text())+parseInt(dataget["vote_num"]);
+                spannum.text(numnew);
+                voteNum();
+                $(".js_ticknum").text(ajaxpar['lastvote'])
+                if(ajaxpar['lastvote']<1)
+                  $('.js_ajax_list .btntp').removeClass('js_vote').addClass('over').attr("dataid",'0');
+                $(".js_votetip").find('.js_votelast').html(ajaxpar['lastvote'])
+                $(".js_votetip").fadeIn(500);
+                window.setTimeout(function(){
+                  $(".js_votetip").fadeOut(1000);
+                },3000);
+                resetVote();
+              }
+              ajaxpar['isajaxing'] = false;
+              $('.loading').fadeOut();   
+            },
+            error:function(){
+              ajaxpar['isajaxing'] = false;
+              $('.loading').fadeOut();   
+            }  
+            
+          });
+        }
+        else{
+          ajaxpar['isajaxing'] = false;
+        }
+      }
+    });
+  }
+  function msgover(){
+    $(".js_votetip2").fadeIn(500);
+    window.setTimeout(function(){
+      $(".js_votetip2").fadeOut(1000);
+    },3000);
+    return false;
+  }
+  
+  function urlData(){
+      var Yurl=window.location.href;
+      var datapost=new Object();
+        datapost['proId'] = parameter['paId'];
+        datapost['url'] = Yurl;
+      $.ajax({
+        type: "POST",
+        url:'http://wx.teemax.com.cn/weixin/app/wei_xin_lottery_code!getJsapiTicket.action', 
+        data: datapost,  
+        dataType: "jsonp",  
+        beforeSend: function(){
+            
+        },
+        success: function(resuleData) {
+          wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: resuleData.appId, // 必填，公众号的唯一标识
+            timestamp:resuleData.timestamp , // 必填，生成签名的时间戳
+            nonceStr: resuleData.noncestr, // 必填，生成签名的随机串
+            signature: resuleData.signature,// 必填，签名，见附录1
+            jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo','onMenuShareQZone'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+          });
+        },
+        error: function(resuleData) {
+          //请求出错处理
+          //alert('请求出错处理');
+        }
+      });
+    }
+  
+  function voteNum(){
+    $.ajax({
+      type: "POST",
+      url:basePath+'/api/vote/wechat/voteWechatAction/voteNum.action', 
+      data: {
+        openid:parameter['openId'],
+        acode:parameter['actId']
+      },  
+      // dataType: "jsonp",
+      beforeSend: function(){
+        $(".loading").fadeIn();  
+      },
+      success: function(resultData) {
+        if(resultData.state=="success"){
+          var totalCount = resultData.data;
+          ajaxpar['lastvote'] = totalCount;
+          ticketNum = ajaxpar['lastvote'];
+          $(".js_ticknum").html(totalCount);
+          $(".js_ticknum").data('total',totalCount);
+          if(parseInt(ajaxpar["lastvote"])<=0){
+            $(".js_vote").addClass('over').removeClass('js_vote')
+          }
+        }
+      },
+      error: function(resuleData) {
+        $(".loading").fadeOut();
+        //请求出错处理
+        //alert('请求出错处理');
+      }
+    });
+  } 
+
+  function setRankListData(_callbackShow){
+    $.ajax({
+      type: "POST",
+      url:basePath+'/api/vote/wechat/voteWechatAction/selectPros.action', 
+      data: {
+        acode:parameter['actId']
+      },  
+      // dataType: "jsonp",
+      beforeSend: function(){
+        $(".loading").fadeIn();  
+      },
+      success: function(resultData) {
+        $(".loading").fadeOut();
+        if(resultData.state=="success"){
+          $("#orderList").html(Handlebars.templates["templates/rank"](resultData.data))
+          $("#orderList").find("img[data-src]").each(function(){
+            $(this)
+              .attr('src',basePath+"/api/vote/wechat/fileAction/getFile.action?filename="+$(this).data('src'))
+          })
+          _callbackShow();
+        }
+      },
+      error: function(resuleData) {
+        $(".loading").fadeOut();
+        //请求出错处理
+        //alert('请求出错处理');
+      }
+    });
+
+
+  }
+
+
+
+  wx.ready(function () {
+    //分享到朋友圈
+    wx.onMenuShareTimeline({
+      title: fenxiang['title'],
+      desc: fenxiang['desc'],
+      link: fenxiang['link'],
+      imgUrl: fenxiang['imgUrl'],
+      success: function () { 
+        //分享到朋友圈成功，开启活动
+        //alert('已分享到朋友圈');
+        beginGame();
+      },
+      cancel: function () { 
+        //alert('已取消分享');
+      }
+    });
+    //发送给朋友
+    wx.onMenuShareAppMessage({
+      title: fenxiang['title'],
+      desc: fenxiang['desc'],
+      link: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8a24fb8d9f60dbbd&redirect_uri=http%3a%2f%2fwx.teemax.com.cn%2fweixin%2fapp%2fgame_votes!auth.action%3factId%3d7%26paId%3d173%26redrectIndex%3ddetail&response_type=code&scope=snsapi_userinfo&state='+parameter['paId']+'#wechat_redirect',
+      imgUrl: fenxiang['imgUrl'],
+      success: function () { 
+        // 用户确认分享后执行的回调函数
+      },
+      cancel: function () { 
+        // 用户取消分享后执行的回调函数
+      }
+    });
+    //分享到QQ
+    wx.onMenuShareQQ({
+      title: fenxiang['title'],
+      desc: fenxiang['desc'],
+      link: fenxiang['link'],
+      imgUrl: fenxiang['imgUrl'],
+      success: function () { 
+        // 用户确认分享后执行的回调函数
+      },
+      cancel: function () { 
+        // 用户取消分享后执行的回调函数
+      }
+    });
+    //分享到腾讯微博
+    wx.onMenuShareWeibo({
+      title: fenxiang['title'],
+      desc: fenxiang['desc'],
+      link: fenxiang['link'],
+      imgUrl: fenxiang['imgUrl'],
+      success: function () { 
+        // 用户确认分享后执行的回调函数
+      },
+      cancel: function () { 
+        // 用户取消分享后执行的回调函数
+      }
+    });
+    //分享到QQ空间
+    wx.onMenuShareQZone({
+      title: fenxiang['title'],
+      desc: fenxiang['desc'],
+      link: fenxiang['link'],
+      imgUrl: fenxiang['imgUrl'],
+      success: function () { 
+        // 用户确认分享后执行的回调函数
+      },
+      cancel: function () { 
+        // 用户取消分享后执行的回调函数
+      }
+    });
+  });
+  function getUrlParameter(){
+    var url = location.search,value;
+    var returnArray = new Array();
+    if (url.indexOf("?") != -1) {
+      var str = url.substr(1);
+      strs = str.split("&");
+      for(var i = 0; i < strs.length; i ++) {
+        returnArray[strs[i].split("=")[0]]=decodeURIComponent(strs[i].split("=")[1]);
+      }
+    }
+    return returnArray;
+  }
+</script>
+</body>
+</html>

@@ -11,6 +11,10 @@ import com.roof.vote.vote.entity.Vote;
 import com.roof.vote.vote.entity.VoteVo;
 
 public interface IVoteService {
+	public VoteVo groupVoteNumByAcodeVcode(String acode, String vcode);
+
+	public List<VoteVo> groupVoteNumByAcode(String acode);
+
 	/** 是否可以投票 */
 	public Boolean canVote(String openid, String acode) throws VoteException;
 

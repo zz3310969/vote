@@ -6,40 +6,136 @@
 		t1.id, t1.activity_code, t1.vote_user_openid, t1.vote_num,
 		t1.vote_date, t1.vote_code
 	</sql>
+	
+	<select id="groupVoteNumByAcodeVcode" resultType="com.roof.vote.vote.entity.VoteVo">
+		select
+		v.activity_code,v.vote_code,sum(v.vote_num)
+		as vote_num
+		,max(v.vote_date) as vote_date from v_vote v
+		where 1=1
+		and
+		v.activity_code = #{activity_code}
+		v.vote_code = #{vote_code}
+		group by v.activity_code,v.vote_code
+		order by sum(v.vote_num) desc ,max(v.vote_date) desc
+	</select>
+	
+
+	<select id="groupVoteNumByAcode" resultType="com.roof.vote.vote.entity.VoteVo">
+		select
+		v.activity_code,v.vote_code,sum(v.vote_num)
+		as vote_num
+		,max(v.vote_date) as vote_date from v_vote v
+		where 1=1
+		and
+		v.activity_code = #{activity_code}
+		group by v.activity_code,v.vote_code
+		order by sum(v.vote_num) desc ,max(v.vote_date) desc
+	</select>
+
 
 	<select id="selectvoteNum" resultType="java.lang.Long">
 		select
 		sum(vote_num)
-		from v_vote
+		from
+		v_vote
 		where 1=1
 		and activity_code = #{activity_code}
-		and vote_user_openid = #{vote_user_openid}
-		and date_format(vote_date,'%Y-%m-%d') between curdate() and date_sub(curdate(),interval -1 day)
-		group by vote_user_openid,activity_code
+		and
+		vote_user_openid = #{vote_user_openid}
+		and
+		date_format(vote_date,'%Y-%m-%d') between curdate() and
+		date_sub(curdate(),interval -1 day)
+		group by
+		vote_user_openid,activity_code
 	</select>
 
 	<select id="selectVotePage" resultType="com.roof.vote.vote.entity.VoteVo">
 		select
-		<include refid="columnsAs" />
+		t1.* , p.`name` as proName,p.username as proUserName ,p.usertel
+		as proUserTel,p.useropenid as proUserOpenid
 		from
 		v_vote t1
-		join
-		(SELECT
-		id
-		from
-		v_vote
+		,
+		(
+		SELECT
+		p.activity_code,
+		p.vote_code,
+		p.`name`,
+		u. NAME AS username,
+		u.tel AS
+		usertel,
+		u.openid as useropenid
+		FROM
+		v_production p,
+		v_activity_user u
+		WHERE
+		p.user_id = u.id
+		) p ,
+		v_activity a
 		where 1=1
-		<include refid="conds" />
+		and
+		t1.activity_code =
+		p.activity_code
+		AND t1.vote_code = p.vote_code
+		and t1.activity_code =
+		a.code
+		<if test="proName != null and proName != ''">
+			and p.name like CONCAT('%', #{proName},'%')
+		</if>
+		<if test="actName != null and actName != ''">
+			and a.name like CONCAT('%', #{actName},'%')
+		</if>
+		<if test="vote_code != null">
+			and t1.vote_code = #{vote_code}
+		</if>
+		<if test="vote_start_date != null and vote_end_date != null">
+			and t1.vote_date BETWEEN #{vote_start_date} and
+			#{vote_end_date}
+		</if>
 		order by id desc
-		limit #{firstrownum}, #{limit}) t2
-		where t1.id = t2.id
+		limit #{firstrownum}, #{limit}
 	</select>
 
 	<select id="selectVoteCount" resultType="java.lang.Long">
 		select
-		count(id)
-		from v_vote
+		count(t1.id) from
+		v_vote t1
+		,
+		(
+		SELECT
+		p.activity_code,
+		p.vote_code,
+		p.`name`,
+		u. NAME AS username,
+		u.tel AS usertel
+		FROM
+		v_production p,
+		v_activity_user u
+		WHERE
+		p.user_id = u.id
+		) p , v_activity a
 		where 1=1
-		<include refid="conds" />
+		and
+		t1.activity_code =
+		p.activity_code
+		AND t1.vote_code =
+		p.vote_code
+		and
+		t1.activity_code =
+		a.code
+		<if test="proName != null and proName != ''">
+			and p.name like CONCAT('%', #{proName},'%')
+		</if>
+		<if test="actName != null and actName != ''">
+			and a.name like CONCAT('%', #{actName},'%')
+		</if>
+		<if test="vote_code != null">
+			and t1.vote_code = #{vote_code}
+		</if>
+		<if test="vote_start_date != null and vote_end_date != null">
+			and t1.vote_date BETWEEN #{vote_start_date} and
+			#{vote_end_date}
+		</if>
 	</select>
 </mapper>
