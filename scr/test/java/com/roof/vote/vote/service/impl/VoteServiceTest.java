@@ -21,6 +21,12 @@ public class VoteServiceTest extends AbstractJUnit4SpringContextTests {
 	private IVoteService voteService;
 
 	@Test
+	public void testgroupVoteNumByAcode() {
+		List<VoteVo> list = voteService.groupVoteNumByAcode("A-20171011-000002");
+		System.out.println(JSON.toJSONString(list));
+	}
+
+	@Test
 	public void testCanVote() {
 		Boolean b = voteService.canVote("toupiao1", "A-20171011-000002");
 		System.out.println(b);

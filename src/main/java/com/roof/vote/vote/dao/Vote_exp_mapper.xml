@@ -6,6 +6,33 @@
 		t1.id, t1.activity_code, t1.vote_user_openid, t1.vote_num,
 		t1.vote_date, t1.vote_code
 	</sql>
+	
+	<select id="groupVoteNumByAcodeVcode" resultType="com.roof.vote.vote.entity.VoteVo">
+		select
+		v.activity_code,v.vote_code,sum(v.vote_num)
+		as vote_num
+		,max(v.vote_date) as vote_date from v_vote v
+		where 1=1
+		and
+		v.activity_code = #{activity_code}
+		v.vote_code = #{vote_code}
+		group by v.activity_code,v.vote_code
+		order by sum(v.vote_num) desc ,max(v.vote_date) desc
+	</select>
+	
+
+	<select id="groupVoteNumByAcode" resultType="com.roof.vote.vote.entity.VoteVo">
+		select
+		v.activity_code,v.vote_code,sum(v.vote_num)
+		as vote_num
+		,max(v.vote_date) as vote_date from v_vote v
+		where 1=1
+		and
+		v.activity_code = #{activity_code}
+		group by v.activity_code,v.vote_code
+		order by sum(v.vote_num) desc ,max(v.vote_date) desc
+	</select>
+
 
 	<select id="selectvoteNum" resultType="java.lang.Long">
 		select
@@ -94,7 +121,8 @@
 		p.activity_code
 		AND t1.vote_code =
 		p.vote_code
-		and t1.activity_code =
+		and
+		t1.activity_code =
 		a.code
 		<if test="proName != null and proName != ''">
 			and p.name like CONCAT('%', #{proName},'%')

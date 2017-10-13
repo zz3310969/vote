@@ -29,6 +29,8 @@ public class ProductionVo extends Production {
 
 	private String username;// 参赛用户名
 
+	private String usertel;// 参赛用户号码
+
 	private Double num;// 当前票数
 
 	private Long index;// 当前排名
@@ -148,6 +150,14 @@ public class ProductionVo extends Production {
 
 	public void setMarginNum(Double marginNum) {
 		this.marginNum = marginNum;
+	}
+
+	public String getUsertel() {
+		return usertel;
+	}
+
+	public void setUsertel(String usertel) {
+		this.usertel = usertel;
 	}
 
 }

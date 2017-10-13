@@ -37,6 +37,19 @@ public class VoteService implements IVoteService {
 	@Autowired
 	private RedisTemplate redisTemplate;
 
+	public VoteVo groupVoteNumByAcodeVcode(String acode, String vcode) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("activity_code", acode);
+		map.put("vote_code", vcode);
+		VoteVo list = (VoteVo) voteDao.selectForList("groupVoteNumByAcodeVcode", map);
+		return list;
+	}
+
+	public List<VoteVo> groupVoteNumByAcode(String acode) {
+		List<VoteVo> list = (List<VoteVo>) voteDao.selectForList("groupVoteNumByAcode", acode);
+		return list;
+	}
+
 	/** 今天是否可以投票 */
 	public Boolean canVote(String openid, String acode) throws VoteException {
 		Long l = this.voteNum(openid, acode);
@@ -86,7 +99,8 @@ public class VoteService implements IVoteService {
 		v.setVote_user_openid(vote.getVote_user_openid());
 		this.save(v);
 		// zset+1
-		this.redisIncrement(vote.getActivity_code(), vote.getVote_code(), vote.getVote_num());
+		// this.redisIncrement(vote.getActivity_code(), vote.getVote_code(),
+		// vote.getVote_num());
 
 	}
 

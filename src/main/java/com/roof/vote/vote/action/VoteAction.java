@@ -58,9 +58,6 @@ public class VoteAction {
 
 	@RequestMapping("/reportByoneAct")
 	public @ResponseBody Result reportByoneAct(VoteVo vote, String acode, HttpServletRequest request, Model model) {
-		if (acode == null) {
-			acode = "A-20171011-000002";
-		}
 		List<ProductionVo> pros = productionService.selectPros(acode);
 		return new Result(Result.SUCCESS, pros);
 	}
