@@ -105,6 +105,7 @@
 		left join v_activity_user u on p.user_id = u.id
 		where
 		p.activity_code=#{activity_code}
+		and p.status = 'processed'
 	</select>
 
 
