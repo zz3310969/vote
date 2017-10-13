@@ -41,7 +41,7 @@ public class VoteService implements IVoteService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("activity_code", acode);
 		map.put("vote_code", vcode);
-		VoteVo list = (VoteVo) voteDao.selectForList("groupVoteNumByAcodeVcode", map);
+		VoteVo list = (VoteVo) voteDao.selectForObject("groupVoteNumByAcodeVcode", map);
 		return list;
 	}
 
