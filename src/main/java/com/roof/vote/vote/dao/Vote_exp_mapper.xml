@@ -15,7 +15,7 @@
 		where 1=1
 		and
 		v.activity_code = #{activity_code}
-		v.vote_code = #{vote_code}
+		and v.vote_code = #{vote_code}
 		group by v.activity_code,v.vote_code
 		order by sum(v.vote_num) desc ,max(v.vote_date) desc
 	</select>
