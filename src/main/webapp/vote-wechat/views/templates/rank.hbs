@@ -1,0 +1,21 @@
+{{!-- 当前排名 --}}
+<li class="rank_tit">
+<div class="col1">排名</div>
+<div class="col2">作品名</div>
+<div class="col3">当前票数</div>
+</li>
+{{#each this}}
+  {{#lt @index 3}}
+  <li class="rank{{add @index 1}}  js_list">
+    <div class="mc"><img src="/images/rank{{add @index 1}}.png"/></div>
+    <div class="name"><img data-src="{{img_src}}" alt="" /><span>{{name}}</span></div>
+    <div class="num">{{num}}票</div>
+  </li>
+  {{else}}
+  <li>
+    <div class="mc">{{add @index 1}}</div>
+    <div class="name"><img data-src="{{img_src}}" alt="" /><span>{{name}}</span></div>
+    <div class="num">{{num}}票</div>
+  </li>
+  {{/lt}}
+{{/each}}
