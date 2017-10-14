@@ -141,7 +141,7 @@ public class ActivityService implements IActivityService {
 		p.setStatus(ProductionStatusEnum.waitProcess.getCode());
 		p.setUpload_date(new Date());
 		p.setUser_id(uservo.getId());
-		p.setVote_code(this.createVoteCode(new Date(), pvo.getActivity_code()));
+//		p.setVote_code(this.createVoteCode(new Date(), pvo.getActivity_code()));
 		productionService.save(p);
 		return p;
 	}
