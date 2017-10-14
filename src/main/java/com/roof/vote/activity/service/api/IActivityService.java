@@ -15,6 +15,9 @@ import com.roof.vote.production.entity.Production;
 import com.roof.vote.production.entity.ProductionVo;
 
 public interface IActivityService {
+
+	public String createVoteCode(Date date, String acode);
+
 	public ActivityVo selelctActivityByCode(String code);
 
 	public String createCode(Date date);
