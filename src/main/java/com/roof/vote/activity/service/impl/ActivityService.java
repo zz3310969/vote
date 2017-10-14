@@ -30,6 +30,8 @@ import com.roof.vote.exception.VoteException;
 import com.roof.vote.production.entity.Production;
 import com.roof.vote.production.entity.ProductionVo;
 import com.roof.vote.production.service.api.IProductionService;
+import com.roof.vote.vote.entity.VoteVo;
+import com.roof.vote.vote.service.api.IVoteService;
 
 @Service
 public class ActivityService implements IActivityService {
@@ -58,6 +60,9 @@ public class ActivityService implements IActivityService {
 
 	@Autowired
 	private IProductionService productionService;
+
+	@Autowired
+	private IVoteService voteService;
 
 	@SuppressWarnings("unchecked")
 	public String createCode(Date date) {
@@ -183,6 +188,20 @@ public class ActivityService implements IActivityService {
 		ActivityUserVo uservo = activityUserService.loadByOpenid(uvo.getOpenid());
 		List<ProductionVo> pvos = productionService.selectProductByuserid(uservo.getId());
 		for (ProductionVo productionVo : pvos) {
+			VoteVo votevo = voteService.groupVoteNumByAcodeVcode(productionVo.getActivity_code(),
+					productionVo.getVote_code());
+			// String key =
+			// Vote.createVoteZsetKey(productionVo.getActivity_code());
+			// BoundZSetOperations operations = redisTemplate.boundZSetOps(key);
+			// Double d =
+			// operations.score(Vote.createVoteZsetValueKey(productionVo.getVote_code()));
+			// productionVo.setNum(d != null ? d : 0D);
+			if (votevo != null) {
+				productionVo.setNum(Double.valueOf(votevo.getVote_num()));
+			} else {
+				productionVo.setNum(0D);
+			}
+
 			productionVo.setProStatusName(ProductionStatusEnum.getStatusEnumName(productionVo.getStatus()));
 		}
 		uservo.setProducts(pvos);
