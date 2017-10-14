@@ -48,7 +48,7 @@ public class ActivityUserAction {
 	*/
 
     @RequestMapping("/list")
-    public @ResponseBody Result list(ActivityUser activityUser, HttpServletRequest request, Model model) {
+    public @ResponseBody Result list(ActivityUserVo activityUser, HttpServletRequest request, Model model) {
     Page page = PageUtils.createPage(request);
     page = activityUserService.page(page, activityUser);
     return new Result(Result.SUCCESS,page);

@@ -6,6 +6,24 @@
 		t1.id, t1.name, t1.tel, t1.activity_code, t1.openid
 	</sql>
 
+	<sql id="condsAs">
+		<if test="id != null">
+			and t1.id = #{id}
+		</if>
+		<if test="name != null and name != ''">
+			and t1.name like  CONCAT('%', #{name},'%')
+		</if>
+		<if test="tel != null and tel != ''">
+			and t1.tel = #{tel}
+		</if>
+		<if test="activity_code != null and activity_code != ''">
+			and t1.activity_code = #{activity_code}
+		</if>
+		<if test="openid != null and openid != ''">
+			and t1.openid = #{openid}
+		</if>
+	</sql>
+
 	<select id="loadByOpenid" resultType="com.roof.vote.activityuser.entity.ActivityUserVo">
 		select
 		<include refid="columns" />
@@ -36,18 +54,18 @@
 	<select id="selectActivityUserPage" resultType="com.roof.vote.activityuser.entity.ActivityUserVo">
 		select
 		<include refid="columnsAs" />
+		,t2.NAME  as  actName
 		from
 		v_activity_user t1
-		join
-		(SELECT
-		id
-		from
-		v_activity_user
-		where 1=1
-		<include refid="conds" />
+		LEFT join v_activity t2 on t1.activity_code = t2.code
+		WHERE 1=1
+		<include refid="condsAs" />
+		<if test="actName != null and actName != ''">
+			and t2.name like  CONCAT('%', #{actName},'%')
+		</if>
 		order by id desc
-		limit #{firstrownum}, #{limit}) t2
-		where t1.id = t2.id
+		limit #{firstrownum}, #{limit}
+
 	</select>
 
 	<select id="selectActivityUserCount" resultType="java.lang.Long">

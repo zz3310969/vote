@@ -3,6 +3,7 @@ package com.roof.vote.production.entity;
 import java.util.List;
 
 import com.roof.vote.activityuser.entity.ActivityUserVo;
+import com.roof.vote.common.ProductionStatusEnum;
 
 /**
  * @author 模版生成 <br/>
@@ -67,6 +68,9 @@ public class ProductionVo extends Production {
 	}
 
 	public String getProStatusName() {
+		if(status!=null){
+			proStatusName = ProductionStatusEnum.getStatusEnumName(status);
+		}
 		return proStatusName;
 	}
 

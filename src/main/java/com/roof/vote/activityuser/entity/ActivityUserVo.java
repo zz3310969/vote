@@ -15,6 +15,8 @@ public class ActivityUserVo extends ActivityUser {
 
 	private List<ProductionVo> products;
 
+	private String actName;
+
 	public ActivityUserVo() {
 		super();
 	}
@@ -40,4 +42,11 @@ public class ActivityUserVo extends ActivityUser {
 		this.products = products;
 	}
 
+	public String getActName() {
+		return actName;
+	}
+
+	public void setActName(String actName) {
+		this.actName = actName;
+	}
 }

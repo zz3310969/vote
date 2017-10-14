@@ -26,6 +26,11 @@ public class ProductionDao extends AbstractDao implements IProductionDao {
 		//IPageQuery pageQuery = pageQueryFactory.getPageQuery(page,"selectProductionPage", null);
 		return pageQuery.select(production);
 	}
+
+	public Page page_(Page page, Production production) {
+		IPageQuery pageQuery = pageQueryFactory.getPageQuery(page,"selectProductionPage_", "selectProductionCount");
+		return pageQuery.select(production);
+	}
 	
 	@Autowired
 	public void setPageQueryFactory(

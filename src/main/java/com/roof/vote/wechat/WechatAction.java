@@ -34,6 +34,9 @@ public class WechatAction {
             return new Result(Result.ERROR,"code不能为空");
         }
         String openid = weChatHander.getOpenid(code);
+        if(StringUtils.isEmpty(openid)){
+            return new Result(Result.ERROR,"openid取不到");
+        }
         return new Result(Result.SUCCESS,"",openid);
     }
 

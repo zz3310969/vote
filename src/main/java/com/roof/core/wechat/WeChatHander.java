@@ -107,6 +107,11 @@ public class WeChatHander {
     }
 
     public String getJsapi_ticket() throws IOException {
+        BoundValueOperations<String,String> getredis = redisTemplate.boundValueOps(redis_jsapi_key);
+        String ss = getredis.get();
+        if (StringUtils.isNotBlank(ss)){
+            return ss;
+        }
         String url = jsapi_ticket_url;
         url = url.replace("ACCESS_TOKEN",getAccess_token());
         String s = HttpClientUtil.get(url);

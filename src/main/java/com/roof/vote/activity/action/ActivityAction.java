@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.roof.vote.activity.entity.ActivityVo;
 import org.roof.roof.dataaccess.api.Page;
 import org.roof.roof.dataaccess.api.PageUtils;
 import org.roof.spring.Result;
@@ -57,6 +58,12 @@ public class ActivityAction {
 	 * model.addAllAttributes(PageUtils.createPagePar(page));
 	 * this.loadCommon(model); return "/selin/activity/activity_list.jsp"; }
 	 */
+
+	@RequestMapping("/all")
+	public @ResponseBody Result all( HttpServletRequest request, Model model) {
+		List<ActivityVo> list =  activityService.selectForList(new Activity());
+		return new Result(Result.SUCCESS, list);
+	}
 
 	@RequestMapping("/list")
 	public @ResponseBody Result list(Activity activity, HttpServletRequest request, Model model) {

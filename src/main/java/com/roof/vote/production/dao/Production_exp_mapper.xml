@@ -13,7 +13,7 @@
 			and t1.id = #{id}
 		</if>
 		<if test="name != null and name != ''">
-			and t1.name = #{name}
+			and t1.name LIKE  CONCAT('%', #{name},'%')
 		</if>
 		<if test="activity_code != null and activity_code != ''">
 			and t1.activity_code = #{activity_code}
@@ -123,6 +123,31 @@
 		v_activity_user t3 on t1.user_id = t3.id
 		where 1 = 1
 		<include refid="condsAs" />
+		order by t1.id asc
+		limit #{firstrownum}, #{limit}
+	</select>
+
+	<select id="selectProductionPage_" resultType="com.roof.vote.production.entity.ProductionVo">
+		select
+		<include refid="columnsAs" />
+		,
+		t3.name as username,
+		t3.tel as usertel,
+		(SELECT  name from v_activity WHERE code = t1.activity_code ) as actName,
+		t3.openid as useropenid
+		from
+		v_production t1
+		left join
+		v_activity_user t3 on t1.user_id = t3.id LEFT JOIN v_activity t2 on t1.activity_code = t2.code
+		where 1 = 1
+		<include refid="condsAs" />
+		<if test="actName != null and actName != ''">
+			and t2.name LIKE  CONCAT('%', #{actName},'%')
+		</if>
+		<if test="username != null and username != ''">
+			and t3.name LIKE  CONCAT('%', #{username},'%')
+		</if>
+
 		order by t1.id asc
 		limit #{firstrownum}, #{limit}
 	</select>

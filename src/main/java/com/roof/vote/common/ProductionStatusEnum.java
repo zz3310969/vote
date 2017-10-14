@@ -7,7 +7,7 @@ import java.util.Map;
 
 public enum ProductionStatusEnum {
     waitProcess("waitProcess", "等待审核"), processed("processed", "审核通过"), cancel("cancel",
-            "取消"), managecancel("managecancel", "审核不通过作废");
+            "取消"), managecancel("managecancel", "审核不通过");
 
     private String code;
 

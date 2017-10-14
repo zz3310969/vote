@@ -1,5 +1,6 @@
 package com.roof.vote.production.action;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.alibaba.fastjson.JSON;
+import com.roof.vote.activity.service.api.IActivityService;
 import com.roof.vote.common.ProductionStatusEnum;
 import org.roof.roof.dataaccess.api.Page;
 import org.roof.roof.dataaccess.api.PageUtils;
@@ -20,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -28,6 +31,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ProductionAction {
 	private IProductionService productionService;
 	private IDictionaryService dictionaryService;
+
+	@Autowired
+	private IActivityService activityService;
 
 	// 加载页面的通用数据
 	private void loadCommon(Model model){
@@ -53,7 +59,7 @@ public class ProductionAction {
 	*/
 
     @RequestMapping("/list")
-    public @ResponseBody Result list(Production production, HttpServletRequest request, Model model) {
+    public @ResponseBody Result list(ProductionVo production, HttpServletRequest request, Model model) {
     Page page = PageUtils.createPage(request);
     page = productionService.page_(page, production);
     return new Result(Result.SUCCESS,page);
@@ -91,6 +97,16 @@ public class ProductionAction {
 		return "/selin/production/production_detail.jsp";
 	}
 
+	@RequestMapping("/load")
+	public @ResponseBody Result load(Production production) {
+		if (production != null&& production.getId() != null) {
+			production = productionService.load(production);
+			return new Result("保存成功!",production);
+		} else {
+			return new Result(Result.ERROR,"数据传输失败!");
+		}
+	}
+
 	@RequestMapping("/create")
 	public @ResponseBody Result create(Production production) {
 		if (production != null) {
@@ -100,10 +116,25 @@ public class ProductionAction {
 			return new Result("数据传输失败!");
 		}
 	}
+
+	@RequestMapping("/audit")
+	public @ResponseBody Result audit(@RequestBody Production production) {
+		if (production != null) {
+			ProductionVo vo = productionService.load(production);
+			production.setUpdate_date(new Date());
+			String code = activityService.createVoteCode(new Date(),vo.getActivity_code());
+			production.setVote_code(code);
+			productionService.updateIgnoreNull(production);
+			return new Result("保存成功!");
+		} else {
+			return new Result("数据传输失败!");
+		}
+	}
 	
 	@RequestMapping("/update")
-	public @ResponseBody Result update(Production production) {
+	public @ResponseBody Result update(@RequestBody Production production) {
 		if (production != null) {
+			production.setUpdate_date(new Date());
 			productionService.updateIgnoreNull(production);
 			return new Result("保存成功!");
 		} else {
