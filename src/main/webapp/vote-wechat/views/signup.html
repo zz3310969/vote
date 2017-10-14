@@ -110,16 +110,16 @@
             $('.errortip').html('请上传作品！');
           }
         }
-        var name = $("#name").val();
-        if(name.length<2){
-          $('.errortip').html('请输入作品名称！');
-          $("#name").focus();
-          return false;
-        }
         var userName = $("#userName").val();
         if(userName.length<2){
           $('.errortip').html('请输入姓名或单位名称！');
           $("#userName").focus();
+          return false;
+        }
+        var name = $("#name").val();
+        if(name.length<2){
+          $('.errortip').html('请输入作品名称！');
+          $("#name").focus();
           return false;
         }
         var phone = $("#phone").val();
@@ -153,16 +153,16 @@
           $('.errortip').html('请上传作品！');
         }
       }
-      var name = $("#name").val();
-      if(name.length<2){
-        $('.errortip').html('请输入作品名称！');
-        $("#name").focus();
-        return false;
-      }
       var userName = $("#userName").val();
       if(userName.length<2){
         $('.errortip').html('请输入姓名或单位名称！');
         $("#userName").focus();
+        return false;
+      }
+      var name = $("#name").val();
+      if(name.length<2){
+        $('.errortip').html('请输入作品名称！');
+        $("#name").focus();
         return false;
       }
       var phone = $("#phone").val();

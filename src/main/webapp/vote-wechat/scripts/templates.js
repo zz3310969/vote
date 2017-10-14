@@ -43,11 +43,9 @@ templates["templates/mywork_list"] = template({"1":function(container,depth0,hel
     + ((stack1 = (helpers.equals || (depth0 && depth0.equals) || helpers.helperMissing).call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.proStatusName : depth0),"审核通过",{"name":"equals","hash":{},"fn":container.program(2, data, 0),"inverse":container.program(9, data, 0),"data":data})) != null ? stack1 : "")
     + "</li>\r\n";
 },"2":function(container,depth0,helpers,partials,data) {
-    var stack1, helper;
+    var stack1;
 
-  return "    <div class=\"vt_txt\"><span>票数"
-    + container.escapeExpression(((helper = (helper = helpers.num || (depth0 != null ? depth0.num : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"num","hash":{},"data":data}) : helper)))
-    + "："
+  return "    <div class=\"vt_txt\"><span>票数："
     + ((stack1 = helpers["if"].call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.num : depth0),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.program(5, data, 0),"data":data})) != null ? stack1 : "")
     + "票</span></div>\r\n"
     + ((stack1 = helpers["if"].call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.index : depth0),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
