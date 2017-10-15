@@ -92,10 +92,14 @@ public class VoteService implements IVoteService {
 		if (!avo.getStatus().equals(ActivityStatusEnum.inProgress.getCode())) {
 			throw new VoteException("活动不能投票");
 		}
+		if (new Date().getTime() > avo.getVote_end_time().getTime() || new Date().getTime()< avo.getVote_start_time().getTime()) {
+			throw new VoteException("不在投票时间内");
+		}
 		Long l = this.voteNum(vote.getVote_user_openid(), vote.getActivity_code());
 		if (l < vote.getVote_num()) {
 			throw new VoteException("你没有这么多票了，再见");
 		}
+
 		Vote v = new Vote();
 		BeanUtils.copyProperties(vote, v);
 		v.setVote_date(new Date());

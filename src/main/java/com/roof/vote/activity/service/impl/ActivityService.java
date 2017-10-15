@@ -64,6 +64,7 @@ public class ActivityService implements IActivityService {
 	@Autowired
 	private IVoteService voteService;
 
+
 	@SuppressWarnings("unchecked")
 	public String createCode(Date date) {
 		String key = CODEPREFIX + "-" + RoofDateUtils.dateToString(date, "yyyyMMdd");
@@ -133,6 +134,10 @@ public class ActivityService implements IActivityService {
 			activityUserService.save(activityUser);
 			uservo = new ActivityUserVo();
 			uservo.setId(activityUser.getId());
+		}
+		ActivityVo avo = this.selelctActivityByCode(pvo.getActivity_code());
+		if (new Date().getTime() > avo.getApply_end_time().getTime() || new Date().getTime()< avo.getApply_start_time().getTime()) {
+			throw new VoteException("不在报名时间内");
 		}
 		// 新增活动，状态为待审核
 		Production p = new Production();
