@@ -86,12 +86,15 @@
 		<if test="actName != null and actName != ''">
 			and a.name like CONCAT('%', #{actName},'%')
 		</if>
-		<if test="vote_code != null">
+		<if test="vote_code != null and vote_code != ''">
 			and t1.vote_code = #{vote_code}
 		</if>
 		<if test="vote_start_date != null and vote_end_date != null">
 			and t1.vote_date BETWEEN #{vote_start_date} and
 			#{vote_end_date}
+		</if>
+		<if test="activity_code != null and activity_code != ''">
+			and t1.activity_code = #{activity_code}
 		</if>
 		order by id desc
 		limit #{firstrownum}, #{limit}
@@ -130,12 +133,15 @@
 		<if test="actName != null and actName != ''">
 			and a.name like CONCAT('%', #{actName},'%')
 		</if>
-		<if test="vote_code != null">
+		<if test="vote_code != null and vote_code != ''">
 			and t1.vote_code = #{vote_code}
 		</if>
 		<if test="vote_start_date != null and vote_end_date != null">
 			and t1.vote_date BETWEEN #{vote_start_date} and
 			#{vote_end_date}
+		</if>
+		<if test="activity_code != null and activity_code != ''">
+			and t1.activity_code = #{activity_code}
 		</if>
 	</select>
 </mapper>

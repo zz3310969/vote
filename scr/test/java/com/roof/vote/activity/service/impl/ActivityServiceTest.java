@@ -28,6 +28,14 @@ public class ActivityServiceTest extends AbstractJUnit4SpringContextTests {
 	private IActivityService activityService;
 	@Autowired
 	private VoteFileService voteFileService;
+	
+	@Test
+	public void testpageQueryApply(){
+		ActivityUserVo vo = new ActivityUserVo();
+		vo.setOpenid("o5u82wd3A-Jr9h3FbNphYsEAjuqA");
+		ActivityUserVo v = activityService.pageQueryApply(vo);
+		System.out.println(JSON.toJSONString(v));
+	}
 
 	@Test
 	public void testCanApply() throws VoteException, ParseException {
