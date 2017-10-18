@@ -8,8 +8,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.taglibs.standard.functions.Functions;
 import org.roof.roof.dataaccess.api.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,6 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.roof.vote.common.ActivityStatusEnum;
 import com.roof.vote.common.ProductionStatusEnum;
 import com.roof.vote.production.dao.api.IProductionDao;
@@ -96,7 +101,7 @@ public class ProductionService implements IProductionService {
 			}
 		}
 		for (ProductionVo p : pros) {
-			if(!returnpros.contains(p)){
+			if (!returnpros.contains(p)) {
 				returnpros1.add(p);
 			}
 		}
@@ -140,7 +145,7 @@ public class ProductionService implements IProductionService {
 				perindex = i - 1;
 			}
 		}
-		if(pvo.getIndex()!=null){
+		if (pvo.getIndex() != null) {
 			if (perindex < 0) {
 				pvo.setMarginNum(0D);
 				pvo.setPerNum(0D);
@@ -149,8 +154,9 @@ public class ProductionService implements IProductionService {
 				pvo.setPerNum(per.getNum());
 				pvo.setMarginNum(new BigDecimal(per.getNum()).subtract(new BigDecimal(pvo.getNum())).doubleValue());
 			}
-		}else{
-			pvo.setIndex(0L);;
+		} else {
+			pvo.setIndex(0L);
+			;
 			pvo.setMarginNum(0D);
 			pvo.setPerNum(0D);
 		}
@@ -250,21 +256,42 @@ public class ProductionService implements IProductionService {
 	public Page page(Page page, Production production) {
 		productionDao.page(page, production);
 		List<ProductionVo> list = (List<ProductionVo>) page.getDataList();
-		for (ProductionVo productionVo : list) {
-			VoteVo votevo = voteService.groupVoteNumByAcodeVcode(productionVo.getActivity_code(),
-					productionVo.getVote_code());
-			// String key =
-			// Vote.createVoteZsetKey(productionVo.getActivity_code());
-			// BoundZSetOperations operations = redisTemplate.boundZSetOps(key);
-			// Double d =
-			// operations.score(Vote.createVoteZsetValueKey(productionVo.getVote_code()));
-			// productionVo.setNum(d != null ? d : 0D);
-			if (votevo != null) {
-				productionVo.setNum(Double.valueOf(votevo.getVote_num()));
-			} else {
-				productionVo.setNum(0D);
+		if (list != null && list.size() > 0) {
+			List<VoteVo> volist = voteService.groupVoteNumByAcode(list.get(0).getActivity_code());
+
+			Map<String, VoteVo> mapVotes = Maps.uniqueIndex(volist, new Function<VoteVo, String>() {
+				@Override
+				public String apply(VoteVo vo) {
+					return vo.getVote_code();
+				}
+			});
+
+			for (ProductionVo productionVo : list) {
+				if (mapVotes.get(productionVo.getVote_code()) != null) {
+					productionVo.setNum(Double.valueOf(mapVotes.get(productionVo.getVote_code()).getVote_num()));
+				} else {
+					productionVo.setNum(0D);
+				}
 			}
+
 		}
+
+		// for (ProductionVo productionVo : list) {
+		// VoteVo votevo =
+		// voteService.groupVoteNumByAcodeVcode(productionVo.getActivity_code(),
+		// productionVo.getVote_code());
+		// String key =
+		// Vote.createVoteZsetKey(productionVo.getActivity_code());
+		// BoundZSetOperations operations = redisTemplate.boundZSetOps(key);
+		// Double d =
+		// operations.score(Vote.createVoteZsetValueKey(productionVo.getVote_code()));
+		// productionVo.setNum(d != null ? d : 0D);
+		// if (votevo != null) {
+		// productionVo.setNum(Double.valueOf(votevo.getVote_num()));
+		// } else {
+		// productionVo.setNum(0D);
+		// }
+		// }
 		page.setDataList(list);
 		return page;
 	}
